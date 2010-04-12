@@ -1,0 +1,28 @@
+#!/usr/bin/env escript
+
+%% run in the top directory of an erlang project, updates the OTP application resource file
+%% to reflect the complete list of modules in the src directory. 
+%%
+%% Doesn't account for packages.
+%% Stomps on your existing app file.
+
+main(_Args) ->
+    {ok, Pwd} = file:get_cwd(),
+    {true, AppFile} = rebar_app_utils:is_app_dir(Pwd),    
+    {ok, AppData} = file:consult(AppFile),
+    [{application, AppSpec, PList}] = AppData,
+    Mods = proplists:get_value(modules, PList),
+    Path = filename:join([Pwd, "src/*.erl"]),
+    Sources = lists:map(
+        fun(P) -> list_to_atom(filename:basename(P, ".erl")) end,
+        filelib:wildcard(Path)),
+    UpdatedMods = sets:to_list(sets:from_list(Mods ++ Sources)), 
+    %% lists:merge(lists:sort(Mods), lists:sort(Sources)),
+    NewAppData = {application, AppSpec, lists:keyreplace(modules, 1, PList, {modules, UpdatedMods})}, 
+    io:format("Updating application modules: ~p~n", [UpdatedMods]),
+    Repr = erl_pp:expr(erl_parse:abstract(NewAppData)),
+    %% io:format("~p: ~p~n", [AppFile, list_to_binary(Repr)]), 
+    case file:write_file(AppFile, list_to_binary(Repr ++ ".")) of
+        ok -> ok;
+        {error, Err} -> io:format("~p~n", [Err]), halt(1)
+    end.

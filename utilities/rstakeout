@@ -37,6 +37,11 @@
 #
 #   Added ability to suppress output, use -q, here is an example:
 #     rstakeout 'javascriptlint' '**/*.js' -f -q
+#
+# Mod'd by @n0gg1n:
+#   Altered code to check for (and process) new/created files
+#   Added code to growl notify regardless of the status of an operation 
+#
 
 require 'optparse'
 require 'ostruct'
@@ -65,11 +70,11 @@ end
 
 module GrowlNotifier
   class << self
-    def notify(title, msg, img, pri=0, sticky="")
-      system "growlnotify -n 'rstakeout notification' --image #{img} -p #{pri} -m #{msg.inspect} '#{title}' #{sticky}"
+    def notify(title, msg)
+      system "growlnotify -m '#{msg}' '#{title}'"
     end
     
-    private :notify
+    # private :notify
 
     def notify_fail(output)
       notify "Test/Spec FAIL", "#{output}", FAIL_ICON_PATH, 2
@@ -131,14 +136,18 @@ module ParseSpecResult
     output = results.slice(/(\d+)\s+tests?,\s*(\d+)\s+assertions?,\s*(\d+)\s+failures?(,\s*(\d+)\s+errors)?/)
     if output
       $~[3].to_i + $~[5].to_i > 0 ? Notifier.notify_fail(output) : Notifier.notify_pass(output)
+      return true
     end
+    return false
   end
 
   def self.notify_rspec_results(results)
     output = results.slice(/(\d+)\s+examples?,\s*(\d+)\s+failures?(,\s*(\d+)\s+not implemented)?/)
     if output
       $~[2].to_i > 0 ? Notifier.notify_fail(output) : Notifier.notify_pass(output)
+      return true
     end
+    return false
   end
 end
 
@@ -174,6 +183,7 @@ OptionParser.new do |opts|
   opts.on("-q", "--quiet") do |v|
     options.quiet = v
   end
+  opts.on("-m")
 end.parse!
 
 MYTEMP = ENV['TEMP'] || '/tmp'
@@ -197,15 +207,26 @@ def with_exclusive_lock_if_synchronous(run_synced, lockfile, &block)
 end
 
 loop do
-  changed_file, last_changed = files.find { |file, last_changed|
+  files2 = build_mtimes_hash(ARGV)
+  changes = []
+  files2.each do |file,ts|   
     begin
-      File.mtime(file) > last_changed
+      changes << file if ((!files.has_key? file) || (File.mtime(file) > files[file]))
     rescue Errno::ENOENT => e # file may have been moved, deleted etc. while running rstakeout
       warn e
-    end
-  }
+    end    
+  end
+  files = files2
+  
+  #changed_file, last_changed = files.find { |file, last_changed|
+  #  begin
+  #    File.mtime(file) > last_changed
+  #  rescue Errno::ENOENT => e # file may have been moved, deleted etc. while running rstakeout
+  #    warn e
+  #  end
+  #}
 
-  if changed_file
+  changes.each do |changed_file|
     with_exclusive_lock_if_synchronous(options.synchronous, lock_obj) do
       files[changed_file] = File.mtime(changed_file)
       puts "=> #{changed_file} changed, running '#{command}'" unless options.quiet
@@ -217,13 +238,9 @@ loop do
       end
       puts results
 
-      if results.include? 'tests'
-        ParseSpecResult.notify_test_unit_results(results)
-      else
-        ParseSpecResult.notify_rspec_results(results)
-      end
-      # TODO Generic snarl/growl notification for other actions
-      puts "=> done"
+      (Notifier.notify command, results unless 
+        ParseSpecResult.notify_test_unit_results(results) unless
+          ParseSpecResult.notify_rspec_results(results))
     end
   end
   sleep options.sleep_time
