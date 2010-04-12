@@ -10,19 +10,23 @@ export PGDATA=/usr/local/pgsql/data
 export POSTGRES_BIN=/usr/local/pgsql/bin
 export FEDORA_HOME=/usr/local/fedora
 export CATALINA_HOME="/usr/local/tomcat"
-export PATH="$PATH:$POSTGRES_BIN:$JAVA_HOME:$CABAL_BIN:$RUBY_HOME/bin:$JRUBY_HOME/bin:$FEDORA_HOME/server/bin:$FEDORA_HOME/client/bin:$JYTHON_HOME"
+export PATH="$PATH:$HOME/.bash/utilities:$POSTGRES_BIN:$JAVA_HOME:$CABAL_BIN:$RUBY_HOME/bin:$JRUBY_HOME/bin:$FEDORA_HOME/server/bin:$FEDORA_HOME/client/bin:$JYTHON_HOME"
 export LIBPATH=$XERCESCROOT/lib:$LIBPATH
 export LD_LIBRARY_PATH=$XERCESCROOT/lib:$LD_LIBRARY_PATH
 export SHLIB_PATH=$XERCESCROOT/lib:$SHLIB_PATH
 export DYLD_LIBRARY_PATH=/opt/local/lib:$DYLD_LIBRARY_PATH
 export ORACLE_HOME=/Users/pax/oracle/instantclient_10_2
 export PGDATA=/usr/local/pgsql/data
-export ERL_LIBS="/usr/local/src/erlang/erlydtl:/usr/local/src/erlang/esmtp:/usr/local/src/erlang/webmachine-justin:/Users/pax/work/hyperthunk/hmail/spikes/mailer_daemon:/usr/local/src/erlang/webmachine-justin/deps/mochiweb"
+export ERL_LIBS="/Users/t4/Library/Erlang"
+# export ERL_LIBS="/usr/local/src/erlang/erlydtl:/usr/local/src/erlang/esmtp:/usr/local/src/erlang/webmachine-justin:/Users/pax/work/hyperthunk/hmail/spikes/mailer_daemon:/usr/local/src/erlang/webmachine-justin/deps/mochiweb"
 export ROO_HOME="/usr/local/src/java/spring-roo/spring-roo-1.0.0.RC1"
 export M2_HOME="/usr/local/src/java/maven"
 export FLASH_HOME="/Applications/Flash Player.app/Contents/MacOS"
 export CATALINA_HOME="/usr/local/tomcat"
-export PATH="/Users/t4/bin:/Users/t4/bin/cccs:$PATH:$M2_HOME/bin:$CATALINA_HOME/bin:$ROO_HOME/bin:$FLASH_HOME"
+export PGSQLHOME="/Library/PostgreSQL/8.4"
+export ABBOT_HOME="/usr/local/src/web/abbot"
+export JYTHON_HOME="/usr/local/src/jython"
+export PATH="/Users/t4/bin:/Users/t4/bin/cccs:$PGSQLHOME/bin:$PATH:$M2_HOME/bin:$CATALINA_HOME/bin:$ROO_HOME/bin:$FLASH_HOME:$ABBOT_HOME/bin:$JYTHON_HOME/bin"
 #export MAVEN_OPTS="-Xmx1024m"
 export MAVEN_OPTS="-Xms768m -Xmx2046m -XX:MaxPermSize=1024m"
 # set up PS1

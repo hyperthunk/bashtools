@@ -1,0 +1,8 @@
+#!/usr/bin/env sh
+
+cwd=`pwd`
+app=`echo $cwd | awk -F '/' '{ print $NF }'` 
+echo "installing $app into $HOME/Library/Erlang/$app"
+ln -s $cwd $HOME/Library/Erlang/$app
+echo "done..."
+

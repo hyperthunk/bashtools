@@ -1,0 +1,29 @@
+#!/usr/bin/env ruby
+
+require 'filesystemwatcher'
+require 'optparse'
+
+dir  = ARGV[1]
+glob = ARGV[2] if ARGV.size > 2
+prog = ARGV[3] if ARGV.size > 3
+
+puts dir
+puts glob
+puts prog
+raise "FOO"
+
+watcher = FileSystemWatcher.new()
+watcher.send(:addDirectory, *[dir, glob])
+watcher.sleepTime = 10
+watcher.start do |status,file|
+    if (status == FileSystemWatcher::CREATED) then
+        puts "created: #{file}"
+    elsif(status == FileSystemWatcher::MODIFIED) then
+        puts "modified: #{file}"
+    elsif(status == FileSystemWatcher::DELETED) then
+        puts "deleted: #{file}"
+    end
+end
+
+watcher.join()
+

@@ -73,3 +73,12 @@ alias git_changes='source ~/.bash/utilities/git_changes '
 alias gem_proxy='--http-proxy=$HTTP_PROXY '
 alias term='~/.bash/utilities/term '
 
+
+##
+# Your previous /Users/t4/.bash_profile file was backed up as /Users/t4/.bash_profile.macports-saved_2010-01-02_at_17:27:49
+##
+
+# MacPorts Installer addition on 2010-01-02_at_17:27:49: adding an appropriate PATH variable for use with MacPorts.
+export PATH=/opt/local/bin:/opt/local/sbin:$PATH
+# Finished adapting your PATH environment variable for use with MacPorts.
+
