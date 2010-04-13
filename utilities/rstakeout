@@ -71,7 +71,7 @@ end
 module GrowlNotifier
   class << self
     def notify(title, msg)
-      system "growlnotify -m '#{msg}' '#{title}'"
+      system "growlnotify -p 10 -m '#{msg}' '#{title}'"
     end
     
     # private :notify
