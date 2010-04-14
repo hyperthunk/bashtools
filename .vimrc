@@ -98,7 +98,7 @@ set bg=dark
 set showcmd
 set ruler " Show ruler
 "set ch=2 " Make command line two lines high
-match LongLineWarning '\%120v.*' " Error format when a line is longer than 120
+"match LongLineWarning '\%120v.*' " Error format when a line is longer than 120
 
 
 " Line Wrapping ***************************************************************
@@ -177,6 +177,15 @@ map E ge
 " Ruby stuff ******************************************************************
 "compiler ruby         " Enable compiler support for ruby
 "map <F5> :!ruby %<CR>
+
+map <C-J> <C-W>j<C-W>_
+map <C-K> <C-W>k<C-W>_
+" set wmh = 0
+
+nmap <C-H> :tabp<CR>
+nmap <C-K> :tabr<CR>
+nmap <C-L> :tabn<CR>
+nmap <C-J> :tabl<CR>
 
 
 " Omni Completion *************************************************************

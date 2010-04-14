@@ -46,6 +46,7 @@
 require 'optparse'
 require 'ostruct'
 require 'rubygems'
+require File.dirname(__FILE__) + '/pshell'
 
 def require_gem(gemname)
   begin
@@ -232,15 +233,23 @@ loop do
       puts "=> #{changed_file} changed, running '#{command}'" unless options.quiet
 
       if options.include_file
-        results = `#{command} #{changed_file}`
+        results = base_shell(command, changed_file)
+        #results = `#{command} #{changed_file}`
       else
-        results = `#{command}`
+        results = base_shell(command)
+        #results = `#{command}`
       end
-      puts results
+      #puts results
 
-      (Notifier.notify command, results unless 
-        ParseSpecResult.notify_test_unit_results(results) unless
-          ParseSpecResult.notify_rspec_results(results))
+      if results.exitstatus == 0
+        Notifier.notify command, results.stdout.join("")
+      else
+        io = results.stderr.empty? ? results.stdout : results.stderr
+        Notifier.notify "FAILED: #{command}", io.join("")
+      end
+      #(Notifier.notify command, results unless 
+      #  ParseSpecResult.notify_test_unit_results(results) unless
+      #    ParseSpecResult.notify_rspec_results(results))
     end
   end
   sleep options.sleep_time
