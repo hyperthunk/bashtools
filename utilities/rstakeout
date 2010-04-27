@@ -41,6 +41,7 @@
 # Mod'd by @n0gg1n:
 #   Altered code to check for (and process) new/created files
 #   Added code to growl notify regardless of the status of an operation 
+#   Added ability to provide an alternative command which runs when create/delete occurs on fs
 #
 
 require 'optparse'
@@ -68,6 +69,8 @@ when /win32/
 else
   warn "Uh-oh, sorry. No Fancy-schmancy notifiers for #{PLATFORM}"
 end
+
+require_gem 'rake'
 
 module GrowlNotifier
   class << self
@@ -154,9 +157,7 @@ end
 
 def build_mtimes_hash(globs)
   files = {}
-  globs.each { |g|
-    Dir[g].each { |file| files[file] = File.mtime(file) }
-  }
+  FileList.send(:[], *globs).each { |file| files[file] = File.mtime(file) }
   files
 end
 
@@ -220,12 +221,9 @@ class Executor
 
       if @options.include_file && !changed_file.nil?
         results = base_shell(cmd, changed_file)
-        #results = `#{command} #{changed_file}`
       else
         results = base_shell(cmd)
-        #results = `#{command}`
       end
-      #puts results
 
       if results.exitstatus == 0
         Notifier.notify cmd, results.stdout.join("")
@@ -239,25 +237,35 @@ class Executor
   def exec
     if options.verbose
       p options
-      puts "Watching #{files.keys.join(', ')}\n\nFiles: #{files.keys.length}"
+      puts "Watching #{@files.keys.join(', ')}\n\nFiles: #{@files.keys.length}"
     end
     loop do
+      puts "Watching #{@files.inspect}\n"
       files2 = build_mtimes_hash(ARGV)
-      changes = []
+      puts "Processing #{files2.inspect}\n"
+      changes, mods = [], []
       files2.each do |file,ts|   
         begin
-          changes << file if ((!files.has_key? file) || (File.mtime(file) > files[file]))
+          mods << file unless @files.has_key? file
+          changes << file if ((@files.has_key? file) && (File.mtime(file) > @files[file]))
         rescue Errno::ENOENT => e # file may have been moved, deleted etc. while running rstakeout
           warn e
         end    
       end
-      if (files.size != files2.size) && !@options.altcommand.nil?
+      @files.each { |file,ts| mods << file unless files2.has_key? file }
+
+      if !mods.empty? && !@options.altcommand.nil?
         execmd @options.altcommand, nil
       end
-      files = files2
+      @files = files2
 
-      changes.each do |changed_file|
-        execmd @command, changed_file
+      items = changes + mods
+      if @options.include_file
+        items.each do |changed_file|
+          execmd @command, changed_file
+        end
+      else
+        execmd( @command, nil ) unless items.empty?
       end
       sleep @options.sleep_time
     end

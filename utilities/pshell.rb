@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 require 'fileutils'
-require 'open4'
+require File.join(File.dirname(__FILE__), 'open4.rb')
 
 def compose(mod=self, *methods)
     lambda do |*args|
