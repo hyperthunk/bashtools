@@ -240,9 +240,7 @@ class Executor
       puts "Watching #{@files.keys.join(', ')}\n\nFiles: #{@files.keys.length}"
     end
     loop do
-      puts "Watching #{@files.inspect}\n"
       files2 = build_mtimes_hash(ARGV)
-      puts "Processing #{files2.inspect}\n"
       changes, mods = [], []
       files2.each do |file,ts|   
         begin
