@@ -47,7 +47,7 @@
 require 'optparse'
 require 'ostruct'
 require 'rubygems'
-require File.dirname(__FILE__) + '/pshell'
+require File.dirname(__FILE__) + '/../pshell'
 
 def require_gem(gemname)
   begin
@@ -214,17 +214,9 @@ class Executor
     @files = build_mtimes_hash(ARGV)
   end
 
-  def execmd cmd, changed_file
+  def execmd cmd
     with_exclusive_lock_if_synchronous(@options.synchronous, @lock_obj) do
-      files[changed_file] = File.mtime(changed_file) unless changed_file.nil?
-      puts "=> #{changed_file} changed, running '#{cmd}'" unless @options.quiet || changed_file.nil?
-
-      if @options.include_file && !changed_file.nil?
-        results = base_shell(cmd, changed_file)
-      else
-        results = base_shell(cmd)
-      end
-
+	  results = base_shell(cmd)
       if results.exitstatus == 0
         Notifier.notify cmd, results.stdout.join("")
       else
@@ -237,13 +229,14 @@ class Executor
   def exec
     if options.verbose
       p options
-      puts "Watching #{@files.keys.join(', ')}\n\nFiles: #{@files.keys.length}"
+      p "Watching #{@files.keys.join(', ')}\n\nFiles: #{@files.keys.length}"
     end
     loop do
       runcmd = false
       runalt = false
-      fds = FileList.send(:[], ARGV)
-      fds.each do |fd|
+      
+	  fds = FileList.send(:[], ARGV)
+	  fds.each do |fd|
         if @files.has_key? fd
           runcmd = true if (File.mtime(fd) > @files[fd])     
         else
@@ -253,20 +246,9 @@ class Executor
       end
       runalt = true unless fds.size.eql? @files.size
       
-      if runalt
-        execmd @options.altcommand, nil
-      end
-      
-      if runcmd
-        if @options.include_file
-          @files.each do |changed_file|
-            execmd @command, changed_file
-          end
-        else
-          execmd( @command, nil )
-        end
-      end
-      
+      execmd @options.altcommand if runalt
+      execmd @command if runcmd
+          
       sleep @options.sleep_time
     end
   end
