@@ -240,31 +240,33 @@ class Executor
       puts "Watching #{@files.keys.join(', ')}\n\nFiles: #{@files.keys.length}"
     end
     loop do
-      files2 = build_mtimes_hash(ARGV)
-      changes, mods = [], []
-      files2.each do |file,ts|   
-        begin
-          mods << file unless @files.has_key? file
-          changes << file if ((@files.has_key? file) && (File.mtime(file) > @files[file]))
-        rescue Errno::ENOENT => e # file may have been moved, deleted etc. while running rstakeout
-          warn e
-        end    
+      runcmd = false
+      runalt = false
+      fds = FileList.send(:[], ARGV)
+      fds.each do |fd|
+        if @files.has_key? fd
+          runcmd = true if (File.mtime(fd) > @files[fd])     
+        else
+          @files[fd] = File.mtime(fd)
+          runalt = true
+        end
       end
-      @files.each { |file,ts| mods << file unless files2.has_key? file }
-
-      if !mods.empty? && !@options.altcommand.nil?
+      runalt = true unless fds.size.eql? @files.size
+      
+      if runalt
         execmd @options.altcommand, nil
       end
-      @files = files2
-
-      items = changes + mods
-      if @options.include_file
-        items.each do |changed_file|
-          execmd @command, changed_file
+      
+      if runcmd
+        if @options.include_file
+          @files.each do |changed_file|
+            execmd @command, changed_file
+          end
+        else
+          execmd( @command, nil )
         end
-      else
-        execmd( @command, nil ) unless items.empty?
       end
+      
       sleep @options.sleep_time
     end
   end

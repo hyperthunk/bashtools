@@ -8,7 +8,7 @@
 
 main(_Args) ->
     {ok, Pwd} = file:get_cwd(),
-    {true, AppFile} = rebar_app_utils:is_app_dir(Pwd),    
+    {true, AppFile} = get_app_spec(Pwd),    
     {ok, AppData} = file:consult(AppFile),
     [{application, AppSpec, PList}] = AppData,
     %% Mods = proplists:get_value(modules, PList),
@@ -25,4 +25,13 @@ main(_Args) ->
     case file:write_file(AppFile, list_to_binary(Repr ++ ".")) of
         ok -> ok;
         {error, Err} -> io:format("~p~n", [Err]), halt(1)
+    end.
+
+get_app_spec(Dir) ->
+    App = filename:join([Dir, "ebin/*.app"]),
+    case filelib:wildcard(App) of
+        [AppFile] ->
+            {true, AppFile};
+        _ ->
+            false
     end.
