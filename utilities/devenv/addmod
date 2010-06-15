@@ -11,17 +11,18 @@ main(_Args) ->
     {true, AppFile} = get_app_spec(Pwd),    
     {ok, AppData} = file:consult(AppFile),
     [{application, AppSpec, PList}] = AppData,
-    %% Mods = proplists:get_value(modules, PList),
-    Path = filename:join([Pwd, "src/*.erl"]),
-    Sources = lists:map(
-        fun(P) -> list_to_atom(filename:basename(P, ".erl")) end,
-        filelib:wildcard(Path)),
-    %% UpdatedMods = sets:to_list(sets:from_list(Mods ++ Sources)), 
-    %% lists:merge(lists:sort(Mods), lists:sort(Sources)),
+    Files = filelib:fold_files("src", ".*\\.erl$", true, fun(F, AccIn) -> [F|AccIn] end, []),
+	Sources = 
+		lists:map(
+        	fun(Path) -> 
+				list_to_atom(
+				filename:basename(string:join(
+					string:tokens(string:right(Path, length(Path) - 4), "/"), "."), ".erl"))
+			end, 
+		Files),
     NewAppData = {application, AppSpec, lists:keyreplace(modules, 1, PList, {modules, Sources})}, 
     io:format("Updating application modules: ~p~n", [Sources]),
     Repr = erl_pp:expr(erl_parse:abstract(NewAppData)),
-    %% io:format("~p: ~p~n", [AppFile, list_to_binary(Repr)]), 
     case file:write_file(AppFile, list_to_binary(Repr ++ ".")) of
         ok -> ok;
         {error, Err} -> io:format("~p~n", [Err]), halt(1)

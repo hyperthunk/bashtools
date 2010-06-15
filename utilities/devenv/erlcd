@@ -169,7 +169,7 @@ end
 options = OpenStruct.new(:sleep_time => 1, :reload_glob => false, :synchronous => false)
 
 OptionParser.new do |opts|
-  opts.banner = "Usage: rstakeout.rb [options] <command> <filespec>+"
+  opts.banner = "Usage: #{File.basename __FILE__} [options] <command> <filespec>+"
   opts.on("-t", "--sleep-time T", Integer, "time to sleep after each loop iteration") do |t|
     options.sleep_time = t
   end
@@ -240,9 +240,9 @@ class Executor
         if @files.has_key? fd
           runcmd = true if (File.mtime(fd) > @files[fd])     
         else
-          @files[fd] = File.mtime(fd)
           runalt = true
         end
+        @files[fd] = File.mtime(fd)
       end
       runalt = true unless fds.size.eql? @files.size
       
