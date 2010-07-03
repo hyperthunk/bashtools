@@ -3,21 +3,30 @@
 %% run in the top directory of an erlang project, updates the OTP application resource file
 %% to reflect the complete list of modules in the src directory. 
 %%
-%% Doesn't account for packages.
-%% Stomps on your existing app file.
+%% Stomps on your existing app file. 
+%% Might work for nested nodes/applications if run from top level directory.
+%% 
 
-main(_Args) ->
-    {ok, Pwd} = file:get_cwd(),
-    {true, AppFile} = get_app_spec(Pwd),    
+main(Args) ->
+	{AppFile, Dir} = case length(Args) of
+		1 -> 
+			Target = hd(Args),
+			case get_app_spec(Target) of
+				{true, F} -> {F, Target ++ "/src"};
+				false -> {get_app_file(filename:join([Target, "*.app"])), Target}
+			end;
+		_ -> 
+			{ok, Pwd} = file:get_cwd(),
+			{true, AltF} = get_app_spec(Pwd), {AltF, "src"}
+	end,
     {ok, AppData} = file:consult(AppFile),
     [{application, AppSpec, PList}] = AppData,
-    Files = filelib:fold_files("src", ".*\\.erl$", true, fun(F, AccIn) -> [F|AccIn] end, []),
+    Files = filelib:fold_files(Dir, ".*\\.erl$", true, fun(F, AccIn) -> [F|AccIn] end, []),
 	Sources = 
 		lists:map(
         	fun(Path) -> 
-				list_to_atom(
-				filename:basename(string:join(
-					string:tokens(string:right(Path, length(Path) - 4), "/"), "."), ".erl"))
+				Module = re:replace(Path, ".*" ++ Dir ++ "[\\/]{1}(?=.+\\.erl)", "", [{return, list}]),
+				list_to_atom(filename:basename(string:join(string:tokens(Module, "/"), "."), ".erl"))
 			end, 
 		Files),
     NewAppData = {application, AppSpec, lists:keyreplace(modules, 1, PList, {modules, Sources})}, 
@@ -30,7 +39,10 @@ main(_Args) ->
 
 get_app_spec(Dir) ->
     App = filename:join([Dir, "ebin/*.app"]),
-    case filelib:wildcard(App) of
+    get_app_file(App).
+
+get_app_file(Pat) ->
+	case filelib:wildcard(Pat) of
         [AppFile] ->
             {true, AppFile};
         _ ->
