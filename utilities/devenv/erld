@@ -1,0 +1,3 @@
+#!/bin/sh
+open http://erlang.org/doc/man/$1.html
+
