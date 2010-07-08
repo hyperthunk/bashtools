@@ -1,5 +1,5 @@
 source ~/.bashrc;
-source ~/Library/Erlang/setenv.sh;
+source ~/.bash/setenv.sh;
 
 echo -e "Kernel Information: " `uname -smr`
 echo -e "${COLOR_BROWN}`bash --version`"
