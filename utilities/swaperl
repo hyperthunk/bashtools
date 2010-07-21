@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+
+rm /opt/erlang/current
+sudo ln -s /opt/erlang/$1 /opt/erlang/current
