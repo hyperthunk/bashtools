@@ -1,9 +1,10 @@
 #!/usr/bin/env escript
 
-%% run in the top directory of an erlang project, updates the OTP application resource file
-%% to reflect the complete list of modules in the src directory. 
+%% When run in the top directory of an erlang project, updates the OTP application resource file
+%% to reflect the complete list of modules in the src directory. Will update any cover.spec files
+%% located beneath the current working directory also.
 %%
-%% Stomps on your existing app file. 
+%% Stomps on your existing app file and any cover.spec files. 
 %% Might work for nested nodes/applications if run from top level directory.
 %% 
 
@@ -32,8 +33,26 @@ main(Args) ->
     NewAppData = {application, AppSpec, lists:keyreplace(modules, 1, PList, {modules, Sources})}, 
     io:format("Updating application modules: ~p~n", [Sources]),
     Repr = erl_pp:expr(erl_parse:abstract(NewAppData)),
-    case file:write_file(AppFile, list_to_binary(Repr ++ ".")) of
-        ok -> ok;
+    write_to_file(AppFile, Repr ++ "."),
+	case filelib:is_file("cover.spec") of
+		false -> ok;
+		true ->
+			io:format("Updating cover spec modules: ~p~n", [Sources]),
+			{ok, SpecData} = file:consult("cover.spec"),
+			Spec = lists:keyreplace(incl_mods, 1, SpecData, {incl_mods, Sources}),
+			write_to_file("cover.spec", ""),
+			[ append_to_file("cover.spec", list_to_binary(erl_pp:expr(erl_parse:abstract(Item)) ++ ".\n")) || Item <- Spec ]
+	end.
+
+write_to_file(File, Term) ->
+	case file:write_file(File, list_to_binary(Term), [write]) of
+	    ok -> ok;
+        {error, Err} -> io:format("~p~n", [Err]), halt(1)
+    end.
+
+append_to_file(File, Bin) ->
+	case file:write_file(File, Bin, [append]) of
+	    ok -> ok;
         {error, Err} -> io:format("~p~n", [Err]), halt(1)
     end.
 
