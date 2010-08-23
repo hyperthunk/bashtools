@@ -2,6 +2,7 @@
 source ~/.bash/.bash_profile_linux
 
 export ERL_TOP=/opt/erlang
+alias rebar='$HOME/bin/rebar.escript skip_deps=false $1'
 
 source ~/.bash/setenv-linux.sh
 
