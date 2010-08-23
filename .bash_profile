@@ -1,8 +1,6 @@
 source ~/.bashrc;
 
 export ERL_TOP=$HOME/Library/Erlang
-alias rebar='$HOME/bin/rebar.escript skip_deps=true $1'
-
 source ~/.bash/setenv.sh;
 
 echo -e "Kernel Information: " `uname -smr`
