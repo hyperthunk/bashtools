@@ -1,3 +1,0 @@
-[submodule "utilities/devenv"]
-	path = utilities/devenv
-	url = git@github.com:n0gg1n/devenv.git
