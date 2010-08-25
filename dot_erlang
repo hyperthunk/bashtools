@@ -1,0 +1,1 @@
+code:add_pathz(filename:join(os:getenv("HOME"), ".bash/utilities/devenv")).
