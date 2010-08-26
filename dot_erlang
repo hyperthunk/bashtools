@@ -1,1 +1,1 @@
-code:add_pathz(filename:join(os:getenv("HOME"), ".bash/utilities/devenv")).
+code:load_abs(filename:join(os:getenv("HOME"), "devenv/user_default")).
