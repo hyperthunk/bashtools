@@ -50,4 +50,4 @@ export ABBOT_HOME="/usr/local/src/web/abbot"
 # PROMPT_COMMAND='DIR=`pwd|sed -e "s!$HOME!~!"`; if [ ${#DIR} -gt 12 ]; then CurDir="${DIR:0:5}...\W"; else CurDir=$DIR; fi'
 PS1="\u@\h:\W \$ " 
 
-
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
