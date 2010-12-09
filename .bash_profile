@@ -1,7 +1,16 @@
+# Darwin specific profile. 
+
 source ~/.bashrc;
 
 export ERL_TOP=$HOME/Library/Erlang
 source ~/.bash/setenv.sh;
+
+# MacPorts Installer addition on 2010-07-08_at_21:29:30: adding an appropriate PATH variable for use with MacPorts.
+export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
+# Finished adapting your PATH environment variable for use with MacPorts.
+
+export PYTHON_BASE="/Library/Frameworks/Python.framework/Versions/Current"
+export PATH="$PYTHON_BASE/bin:$PATH"
 
 echo -e "Kernel Information: " `uname -smr`
 echo -e "${COLOR_BROWN}`bash --version`"
@@ -127,12 +136,4 @@ complete -o nospace -F _rebar rebar
 # indent-tabs-mode: nil
 # End:
 # ex: ts=4 sw=4 et filetype=sh
-
-##
-# Your previous /Users/t4/.bash_profile file was backed up as /Users/t4/.bash_profile.macports-saved_2010-07-08_at_21:29:30
-##
-
-# MacPorts Installer addition on 2010-07-08_at_21:29:30: adding an appropriate PATH variable for use with MacPorts.
-export PATH=/opt/local/bin:/opt/local/sbin:$PATH
-# Finished adapting your PATH environment variable for use with MacPorts.
 

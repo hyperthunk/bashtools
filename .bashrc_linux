@@ -1,4 +1,5 @@
-# source ~/.bash_profile_linux;
+# grab the common stuff first, then override
+source ~/.bash/.bashrc
 source ~/.bash/.bash_profile_linux
 
 export ERL_TOP=/opt/erlang

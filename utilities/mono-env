@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+
+export ACLOCAL_FLAGS="-I /Library/Frameworks/Mono.framework/Versions/Current/share/aclocal"
+export PATH="/Library/Frameworks/Mono.framework/Versions/Current/bin:$PATH"
