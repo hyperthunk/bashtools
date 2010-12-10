@@ -1,4 +1,19 @@
 #!/usr/bin/env sh
 
+export MONO_PREFIX=/opt/mono
+#export GNOME_PREFIX=/usr
+#export DYLD_LIBRARY_FALLBACK_PATH=$MONO_PREFIX/lib:$DYLD_LIBRARY_FALLBACK_PATH
+export LD_LIBRARY_PATH="$MONO_PREFIX/lib:$LD_LIBRARY_PATH"
+export C_INCLUDE_PATH="$MONO_PREFIX/include:$C_INCLUDE_PATH"
+export PKG_CONFIG_PATH="$MONO_PREFIX/lib/pkgconfig:$PKG_CONFIG_PATH"
 export ACLOCAL_FLAGS="-I /Library/Frameworks/Mono.framework/Versions/Current/share/aclocal"
+export ACLOCAL_PATH="$MONO_PREFIX/share/aclocal:$ACLOCAL_PATH"
 export PATH="/Library/Frameworks/Mono.framework/Versions/Current/bin:$PATH"
+export PATH="$MONO_PREFIX/bin:$PATH"
+#export DYLD_FALLBACK_LIBRARY_PATH="/Library/Frameworks/Mono.framework/Versions/Current/lib:/lib:/usr/lib"
+#export CFLAGS="-arch i386 -D_XOPEN_SOURCE" 
+#export LDFLAGS="-arch i386" 
+#export CXXFLAGS=$CFLAGS
+export GLIB_OPT_EMBEDDED=--with-glib=embedded
+
+PS1="[mono] \w @ "
