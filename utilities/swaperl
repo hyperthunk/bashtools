@@ -1,4 +1,4 @@
 #!/usr/bin/env sh
 
-rm $ERL_TOP/Current
-sudo ln -s $ERL_TOP/Versions/$1 $ERL_TOP/Current
+rm -f $ERL_TOP/Current
+ln -s $ERL_TOP/Versions/$1 $ERL_TOP/Current

@@ -20,3 +20,4 @@ done
 
 echo Reloading bundles in TextMate...
 osascript -e 'tell app "TextMate" to reload bundles'
+

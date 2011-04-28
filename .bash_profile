@@ -1,8 +1,9 @@
-# Darwin specific profile. 
+# Darwin specific profile.
 
 source ~/.bashrc;
 
 export ERL_TOP=$HOME/Library/Erlang
+export GODI_TOP=$HOME/Library/OCaml
 source ~/.bash/setenv.sh;
 
 # MacPorts Installer addition on 2010-07-08_at_21:29:30: adding an appropriate PATH variable for use with MacPorts.
@@ -15,7 +16,7 @@ export PATH="$PYTHON_BASE/bin:$PATH"
 echo -e "Kernel Information: " `uname -smr`
 echo -e "${COLOR_BROWN}`bash --version`"
 echo -ne "${COLOR_GRAY}Uptime: "; uptime
-echo -ne "${COLOR_GRAY}Server time is: "; date	
+echo -ne "${COLOR_GRAY}Server time is: "; date
 
 export TERM=xterm-color
 export GREP_OPTIONS='--color=auto' GREP_COLOR='1;32'
@@ -60,9 +61,10 @@ if [ ! -f ~/.dirs ]; then  # if doesn't exist, create it
 	touch ~/.dirs
 fi
 
+alias tree="find . -print | sed -e 's;[^/]*/;|____;g;s;____|; |;g'"
 alias show='cat ~/.dirs'
 save (){
-	command sed "/!$/d" ~/.dirs > ~/.dirs1; \mv ~/.dirs1 ~/.dirs; echo "$@"=\"`pwd`\" >> ~/.dirs; source ~/.dirs ; 
+	command sed "/!$/d" ~/.dirs > ~/.dirs1; \mv ~/.dirs1 ~/.dirs; echo "$@"=\"`pwd`\" >> ~/.dirs; source ~/.dirs ;
 }
 source ~/.dirs  # Initialization for the above 'save' facility: source the .sdirs file
 shopt -s cdable_vars # set the bash option so that no '$' is required when using the above facility
