@@ -18,6 +18,8 @@ do
 	fi
 done
 
+git clone https://github.com/zuckschwerdt/asciidoc.tmbundle.git "AsciiDoc.tmbundle"
+
 echo Reloading bundles in TextMate...
 osascript -e 'tell app "TextMate" to reload bundles'
 
