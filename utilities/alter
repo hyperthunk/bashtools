@@ -1,0 +1,28 @@
+#!/usr/bin/env sh
+
+ENV="$HOME/.bash/env"
+if [ $# == 1 ]; then
+    ARCH=`ls -l "$ENV/$1" | grep current | awk '{ print $NF }' | awk -F"/" '{ print $NF }'`
+    echo "Environment '$1' is set to $ARCH"
+fi
+
+if [ $# -ne 2 ]; then
+    echo "Usage alter ENV ARCH"
+    exit 0
+fi
+
+if [ -d "$ENV/$1" ]; then
+    CURRENT="$ENV/$1/current"
+    if [ -d "$CURRENT" ]; then
+        echo "Error: Environment '$1' does not support arch-specific configuration!"
+        exit 1
+    else
+        if [ -h "$CURRENT" ]; then
+            rm "$CURRENT"
+        fi
+        ln -s "$ENV/$1/$2" "$ENV/$1/current"
+    fi
+else
+    echo "Unknown Environment: $1"
+    exit 1
+fi

@@ -1,0 +1,25 @@
+#!/usr/bin/env sh
+
+case "$1" in
+    '-h')
+    echo "Usage putenv TARGET(-ARCH) NAME VALUE"
+    echo "-or- putenv TARGET(-ARCH)"
+    ;;
+esac
+
+TARGET="$1"
+LOC=`echo "$TARGET" | perl -n -e'(/(.*)-x([\d]{2})/) ? (print $1 . "/x" . $2) : print ""'`
+if [ ! "$LOC" ]; then
+    LOC="$TARGET/current"
+fi
+ENV="$HOME/.bash/env/$LOC"
+VAR="$2"
+if [ -d "$ENV" ]; then
+    if [ "$VAR" ]; then
+        echo "export $2=\"$3:\$$2\"" >> "$ENV/setenv.sh"
+    else
+        echo "export $2=\"$3\"" >> "$ENV/setenv.sh"
+    fi
+else
+    mkdir -p "$ENV"
+fi

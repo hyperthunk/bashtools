@@ -1,3 +1,2 @@
 
 git status | grep $1 | awk '/.*/ { print $NF }'
-
