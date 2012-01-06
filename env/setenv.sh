@@ -20,9 +20,9 @@ export XERCESCROOT=/usr/local/xerces
 export XALANCROOT=/usr/local/src/native/xml-xalan2/c
 export FEDORA_HOME="/usr/local/fedora"
 export LIBPATH=$XERCESCROOT/lib:$LIBPATH
-export LD_LIBRARY_PATH="/lib:/usr/lib:$LD_LIBRARY_PATH"
+export LD_LIBRARY_PATH="/lib:/usr/lib:/usr/local/lib:$LD_LIBRARY_PATH"
 export SHLIB_PATH=$XERCESCROOT/lib:$SHLIB_PATH
-export DYLD_LIBRARY_PATH="/opt/local/lib"
+export DYLD_LIBRARY_PATH="$LD_LIBRARY_PATH:/opt/local/lib:$DYLD_LIBRARY_PATH"
 
 ## Haskell/Cabal and OCaml
 export GODI_TOP="$HOME/Library/OCaml"
@@ -32,6 +32,10 @@ export CABAL_BIN="$HOME/.cabal/bin"
 export FLASH_HOME="/Applications/Flash Player.app/Contents/MacOS"
 export ABBOT_HOME="/usr/local/src/web/abbot"
 
+## Generic Oracle Shit - applies to instantclient only
+export ORACLE_HOME="$SQLPATH"
+export TNS_ADMIN="$ORACLE_HOME/admin"
+
 ## Path
 export PATH="$HOME/.bash/utilities:$HOME/bin:$HOME/bin/cccs:$PATH"
 export PATH="$GODI_TOP/bin:$CABAL_BIN:$RUBY_HOME/bin:$PYTHON_BASE/bin:$PATH"
@@ -40,7 +44,7 @@ export PATH="$FLASH_HOME:$ABBOT_HOME/bin:$PATH"
 export PATH="$JAVA_HOME:$JRUBY_HOME/bin:$JYTHON_HOME:$JYTHON_HOME/bin:$PATH"
 export PATH="$M2_HOME/bin:$CATALINA_HOME/bin:$ROO_HOME/bin:$PATH"
 export PATH="$FEDORA_HOME/server/bin:$FEDORA_HOME/client/bin:$PATH"
-export PATH="$POSTGRES_BIN:$PGSQLHOME/bin:$PATH"
+export PATH="$POSTGRES_BIN:$PGSQLHOME/bin:$SQLPATH:$PATH"
 
 # MacPorts Installer addition on 2010-07-08_at_21:29:30: adding an appropriate PATH variable for use with MacPorts.
 export PATH="/opt/local/bin:/opt/local/sbin:$PATH"

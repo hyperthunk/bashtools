@@ -18,7 +18,10 @@ do
 	fi
 done
 
+$SVN --username anon --password anon co "http://svn.textmate.org/trunk/Review/Bundles/Treetop.tmbundle/"
 git clone https://github.com/zuckschwerdt/asciidoc.tmbundle.git "AsciiDoc.tmbundle"
+git clone https://github.com/textmate/python-django.tmbundle.git
+git clone https://github.com/textmate/python-django-templates.tmbundle.git
 
 echo Reloading bundles in TextMate...
 osascript -e 'tell app "TextMate" to reload bundles'

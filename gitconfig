@@ -13,10 +13,11 @@
     subtree-link = !sh -c 'git remote add "$1" "$2" && git fetch "$1" && git co -b "$3" "$1"/master' -
     subtree-attach = !sh -c 'mkdir -p "$1" && git read-tree --prefix="$1" -u "$2"'
     subtree-merge = !sh -c 'git co "$1" && git pull && git co master && git merge --squash -s subtree --no-commit "$1"' -
+    cb = !sh -c 'git-current branch'
 [color]
   branch = auto
   diff = auto
   interactive = auto
   status = auto
 [http]
-	proxy = 
+    proxy = 

@@ -1,0 +1,7 @@
+#!/usr/bin/env sh
+
+case "$1" in
+    "branch")
+        git branch | grep '*' | awk '{ print $NF }'
+        ;;
+esac
