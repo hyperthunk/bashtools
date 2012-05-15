@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+SCM=""
+if [ -d ".hg" ]; then SCM='hg'; fi
+if [ -d ".git" ]; then SCM='git'; fi
+
+$SCM st | grep $1 | awk '/.*/ { print $NF }'
+

@@ -28,24 +28,16 @@
 
 set nocompatible
 
-" Erlang Stuff ***************************************************************
-let g:erlangCompleteFile="~/.vim/bundle/vimerl/autoload/erlang_complete.erl"
-let g:erlangCheckFile="~/.vim/bundle/vimerl/compiler/erlang_check.erl"
-let g:erlangManPath="~/Library/Erlang/Current/man"
-let g:erlangCompletionDisplayDoc=0
-let g:erlangCompletionGrep = '~/work/hyperthunk/evm/erlmodinfo'
 
 " Tabs ************************************************************************
 "set sta " a <Tab> in an indent inserts 'shiftwidth' spaces
 
 function! Tabstyle_tabs()
   " Using 4 column tabs
-  set tabstop=4
-  set shiftwidth=4
-  set smartindent
   set softtabstop=4
   set shiftwidth=4
-  set expandtab
+  set tabstop=4
+  set noexpandtab
   autocmd User Rails set softtabstop=4
   autocmd User Rails set shiftwidth=4
   autocmd User Rails set tabstop=4
@@ -100,6 +92,7 @@ set background=dark
 syntax on " syntax highlighting
 colorscheme ir_black
 set bg=dark
+highlight LineNr term=bold cterm=NONE ctermfg=White ctermbg=NONE gui=NONE guifg=White guibg=NONE
 
 
 " Status Line *****************************************************************
@@ -135,6 +128,7 @@ imap aa @
 
 
 " File Stuff ******************************************************************
+filetype plugin on
 filetype plugin indent on
 " To show current filetype use: set filetype
 
@@ -158,6 +152,12 @@ set number " Show line numbers
 set matchpairs+=<:>
 set vb t_vb= " Turn off bell, this could be more annoying, but I'm not sure how
 
+autocmd FileType c,cpp,python,ruby,java,erlang autocmd BufWritePre <buffer> :%s/\s\+$//e
+highlight ExtraWhitespace ctermbg=red guibg=red
+au ColorScheme * highlight ExtraWhitespace guibg=red
+au BufEnter * match ExtraWhitespace /\s\+$/
+au InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
+au InsertLeave * match ExtraWhiteSpace /\s\+$/
 
 " Invisible characters *********************************************************
 set listchars=trail:.,tab:>-,eol:$
@@ -166,9 +166,9 @@ set nolist
 
 
 " Mouse ***********************************************************************
-"set mouse=a " Enable the mouse
+set mouse=a " Enable the mouse
 "behave xterm
-"set selectmode=mouse
+set selectmode=mouse
 
 
 " Cursor Movement *************************************************************
@@ -197,7 +197,7 @@ nmap <C-J> :tabl<CR>
 
 
 " Omni Completion *************************************************************
-autocmd FileType html :set omnifunc=htmlcomplete#CompleteTags
+autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
 autocmd FileType python set omnifunc=pythoncomplete#Complete
 autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
 autocmd FileType css set omnifunc=csscomplete#CompleteCSS
@@ -205,10 +205,8 @@ autocmd FileType xml set omnifunc=xmlcomplete#CompleteTags
 autocmd FileType php set omnifunc=phpcomplete#CompletePHP
 autocmd FileType c set omnifunc=ccomplete#Complete
 " May require ruby compiled in
-autocmd FileType ruby,eruby set omnifunc=rubycomplete#Complete 
+" autocmd FileType ruby,eruby set omnifunc=rubycomplete#Complete 
 
-" Pathogen *******************************************************************
-call pathogen#runtime_append_all_bundles() 
 
 " -----------------------------------------------------------------------------  
 " |                              Plug-ins                                     |
@@ -218,7 +216,7 @@ call pathogen#runtime_append_all_bundles()
 :noremap ,n :NERDTreeToggle<CR>
 
 " User instead of Netrw when doing an edit /foobar
-let NERDTreeHijackNetrw=1
+" let NERDTreeHijackNetrw=1
 
 " NERDTree CONFIGURATION
 
@@ -235,7 +233,7 @@ let NERDTreeShowBookmarks = 1
 let NERDTreeShowHidden = 1
 
 " Don't hijack NETRW
-let NERDTreeHijackNetrw = 1
+let NERDTreeHijackNetrw = 0
 let NERDTreeIgnore=['\.$', '\~$']
 
 " Make F2 open NERDTree
@@ -303,3 +301,5 @@ endif
 "if hostname() == "foo"
   " do something
 "endif
+
+au! BufWritePost .vimrc source %

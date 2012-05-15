@@ -1,0 +1,12 @@
+#!/usr/bin/env python
+
+## This will shortly be subsumed by fabricate. Actually that'll probably take
+## up to 12 months, but there you have it....
+
+import os
+import sys
+
+
+
+if __NAME__ == '__MAIN__':
+    run()
