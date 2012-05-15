@@ -1,6 +1,6 @@
 [user]
 	name = Tim Watson
-    email = watson.timothy@gmail.com
+	email = tim@rabbitmq.com
 [alias]
     ci = commit
     st = status
@@ -21,3 +21,11 @@
   status = auto
 [http]
     proxy = 
+[core]
+	excludesfile = /Users/t4/.gitignore_global
+[difftool "sourcetree"]
+	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+	path = 
+[mergetool "sourcetree"]
+	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	trustExitCode = true
