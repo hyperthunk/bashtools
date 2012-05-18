@@ -1,4 +1,9 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =2
-let g:netrw_dirhist_1='/Users/t4/work/vmware/rabbitmq-umbrella/rabbitmq-server'
-let g:netrw_dirhist_2='/Users/t4/work/vmware/rabbitmq-umbrella/rabbitmq-server/src'
+let g:netrw_dirhist_cnt =7
+let g:netrw_dirhist_1='/home/t4/work/vmware/rabbitmq-website/site'
+let g:netrw_dirhist_2='/home/t4/work/vmware/rabbitmq-umbrella/rabbitmq-test'
+let g:netrw_dirhist_3='/home/t4/work/vmware/rabbitmq-umbrella/rabbitmq-test/cli_test'
+let g:netrw_dirhist_4='/home/t4/work/vmware/rabbitmq-umbrella/rabbitmq-test/cli_test/retest'
+let g:netrw_dirhist_5='/home/t4/.bash'
+let g:netrw_dirhist_6='/home/t4/.bash/env'
+let g:netrw_dirhist_7='/home/t4/.bash'

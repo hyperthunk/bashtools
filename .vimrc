@@ -152,7 +152,7 @@ set number " Show line numbers
 set matchpairs+=<:>
 set vb t_vb= " Turn off bell, this could be more annoying, but I'm not sure how
 
-autocmd FileType c,cpp,python,ruby,java,erlang autocmd BufWritePre <buffer> :%s/\s\+$//e
+autocmd FileType c,cpp,python,ruby,java,erlang,xml,xsl,xslt,ocaml,haskell,lisp autocmd BufWritePre <buffer> :%s/\s\+$//e
 highlight ExtraWhitespace ctermbg=red guibg=red
 au ColorScheme * highlight ExtraWhitespace guibg=red
 au BufEnter * match ExtraWhitespace /\s\+$/
