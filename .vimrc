@@ -88,7 +88,7 @@ set smartcase " Ignore case when searching lowercase
 
 " Colors **********************************************************************
 "set t_Co=256 " 256 colors
-set background=dark 
+set background=dark
 syntax on " syntax highlighting
 colorscheme ir_black
 set bg=dark
@@ -134,7 +134,6 @@ filetype plugin indent on
 
 "autocmd FileType html :set filetype=xhtml 
 
-
 " Inser New Line **************************************************************
 map <S-Enter> O<ESC> " awesome, inserts new line without going into insert mode
 map <Enter> o<ESC>
@@ -150,14 +149,23 @@ set sessionoptions=blank,buffers,curdir,folds,help,resize,tabpages,winsize
 set backspace=indent,eol,start
 set number " Show line numbers
 set matchpairs+=<:>
-set vb t_vb= " Turn off bell, this could be more annoying, but I'm not sure how
+set vb t_vb= "
 
 autocmd FileType c,cpp,python,ruby,java,erlang,xml,xsl,xslt,ocaml,haskell,lisp autocmd BufWritePre <buffer> :%s/\s\+$//e
+
 highlight ExtraWhitespace ctermbg=red guibg=red
+highlight LongLines ctermbg=red guibg=red
+
 au ColorScheme * highlight ExtraWhitespace guibg=red
+au ColorScheme * highlight LongLines guibg=red
+
 au BufEnter * match ExtraWhitespace /\s\+$/
 au InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
 au InsertLeave * match ExtraWhiteSpace /\s\+$/
+
+au BufEnter * match LongLines /\%>79v.\+/
+au InsertEnter * match LongLines /\%>79v\%#\@<!.\+/
+au InsertLeave * match LongLines /\%>79v.\+/
 
 " Invisible characters *********************************************************
 set listchars=trail:.,tab:>-,eol:$
@@ -270,6 +278,7 @@ let g:AutoComplPop_BehaviorKeywordLength = 2
 " |                             OS Specific                                   |
 " |                      (GUI stuff goes in gvimrc)                           |
 " -----------------------------------------------------------------------------  
+set gfn=Monaco:h12
 
 " Mac *************************************************************************
 "if has("mac") 

@@ -120,3 +120,12 @@ complete -o nospace -F _rebar rebar
 # End:
 # ex: ts=4 sw=4 et filetype=sh
 
+
+##
+# Your previous /Users/t4/.bash_profile file was backed up as /Users/t4/.bash_profile.macports-saved_2012-05-22_at_15:42:06
+##
+
+# MacPorts Installer addition on 2012-05-22_at_15:42:06: adding an appropriate PATH variable for use with MacPorts.
+export PATH=/opt/local/bin:/opt/local/sbin:$PATH
+# Finished adapting your PATH environment variable for use with MacPorts.
+
