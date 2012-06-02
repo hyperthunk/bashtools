@@ -1,2 +1,9 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =0
+let g:netrw_dirhist_cnt =7
+let g:netrw_dirhist_1='/Users/t4/work/hyperthunk/nodewatch'
+let g:netrw_dirhist_2='/Users/t4/work/hyperthunk/nodewatch/dxweb'
+let g:netrw_dirhist_3='/Users/t4/work/hyperthunk/nodewatch/dxkit'
+let g:netrw_dirhist_4='/Users/t4/work/hyperthunk/nodewatch/dxweb/src'
+let g:netrw_dirhist_5='/Users/t4/work/hyperthunk/nodewatch/dxkit/src'
+let g:netrw_dirhist_6='/Users/t4/work/nebularis/systest'
+let g:netrw_dirhist_7='/Users/t4/work/nebularis/systest/src'
