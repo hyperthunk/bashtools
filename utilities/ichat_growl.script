@@ -1,0 +1,86 @@
+property growlAppName : "Growl iChat"
+
+property notificationNames : {"Buddy Became Available", ¬
+	"Buddy Became Unavailable", ¬
+	"Message Received", ¬
+	"Completed File Transfer"}
+property defaultNotificationNames : {"Buddy Became Available", ¬
+	"Buddy Became Unavailable", ¬
+	"Message Received", ¬
+	"Completed File Transfer"}
+
+using terms from application "iChat"
+
+	on buddy became available theBuddy
+		my registerWithGrowl()
+
+		tell application "iChat"
+			tell theBuddy
+				set theTitle to full name & " became available"
+				set theDesc to status message
+				set theIcon to image
+			end tell
+		end tell
+		my notify(theTitle, theDesc, theIcon, "Buddy Became Available")
+	end buddy became available
+
+	on buddy became unavailable theBuddy
+		my registerWithGrowl()
+
+		tell application "iChat"
+			tell theBuddy
+				set theTitle to full name & " went away"
+				set theDesc to status message
+				set theIcon to image
+			end tell
+		end tell
+		my notify(theTitle, theDesc, theIcon, "Buddy Became Unavailable")
+	end buddy became unavailable
+
+	on message received theText from theBuddy for theTextChat
+		my registerWithGrowl()
+
+		tell application "iChat"
+			set theIcon to image of theBuddy
+			set theTitle to full name of theBuddy
+		end tell
+		my notify(theTitle, theText, theIcon, "Message Received")
+	end message received
+
+	on completed file transfer theTransfer
+		my registerWithGrowl()
+		tell application "iChat"
+			tell theTransfer
+				if transfer status is finished then
+					if direction is incoming then
+						set theTitle to "Received File "
+						set theDesc to "from "
+					else
+						set theTitle to "Sent File "
+						set theDesc to "to "
+					end if
+
+					set theTitle to theTitle & (file as string)
+					set theDesc to theDesc & full name of buddy
+				end if
+			end tell
+		end tell
+		my notify(theTitle, theDesc, theIcon, "Message Received")
+	end completed file transfer
+end using terms from
+
+on registerWithGrowl()
+	tell application "GrowlHelperApp"
+		register as application growlAppName all notifications notificationNames default notifications notificationNames icon of application "iChat"
+	end tell
+end registerWithGrowl
+
+on notify(theTitle, desc, icondata, notificationName)
+	tell application "GrowlHelperApp"
+		if icondata is "" or icondata is missing value then
+			notify with name notificationName title theTitle description desc application name growlAppName icon of application "iChat"
+		else
+			notify with name notificationName title theTitle description desc application name growlAppName image icondata
+		end if
+	end tell
+end notify

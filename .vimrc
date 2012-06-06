@@ -130,6 +130,7 @@ imap aa @
 " File Stuff ******************************************************************
 filetype plugin on
 filetype plugin indent on
+" set filetype
 " To show current filetype use: set filetype
 
 "autocmd FileType html :set filetype=xhtml 
@@ -151,6 +152,9 @@ set number " Show line numbers
 set matchpairs+=<:>
 set vb t_vb= "
 
+set laststatus=2
+set statusline=%f\ [%{fugitive#statusline()}]\ %=%l,%c\ %y
+
 autocmd FileType c,cpp,python,ruby,java,erlang,xml,xsl,xslt,ocaml,haskell,lisp autocmd BufWritePre <buffer> :%s/\s\+$//e
 
 highlight ExtraWhitespace ctermbg=red guibg=red
@@ -167,17 +171,13 @@ au BufEnter * match LongLines /\%>79v.\+/
 au InsertEnter * match LongLines /\%>79v\%#\@<!.\+/
 au InsertLeave * match LongLines /\%>79v.\+/
 
-" Invisible characters *********************************************************
 set listchars=trail:.,tab:>-,eol:$
 set nolist
-:noremap ,i :set list!<CR> " Toggle invisible chars
+:noremap ,i :set list!<CR> 
 
-
-" Mouse ***********************************************************************
-set mouse=a " Enable the mouse
+"set mouse=a 
 "behave xterm
-set selectmode=mouse
-
+"set selectmode=mouse
 
 " Cursor Movement *************************************************************
 " Make cursor move by visual lines instead of file lines (when wrapping)
@@ -236,15 +236,9 @@ let NERDTreeHighlightCursorline = 1
 
 " Make bookmarks visible
 let NERDTreeShowBookmarks = 1
-
-" Show hidden files
 let NERDTreeShowHidden = 1
-
-" Don't hijack NETRW
 let NERDTreeHijackNetrw = 0
 let NERDTreeIgnore=['\.$', '\~$']
-
-" Make F2 open NERDTree
 nmap <F2> :NERDTreeToggle<CR>
 
 " Single click for everything
@@ -266,9 +260,9 @@ map ,b :FuzzyFinderBuffer<CR>
 
 " autocomplpop ***************************************************************
 " complete option
-"set complete=.,w,b,u,t,k
-"let g:AutoComplPop_CompleteOption = '.,w,b,u,t,k'
-"set complete=.
+" set complete=.,w,b,u,t,k
+" let g:AutoComplPop_CompleteOption = '.,w,b,u,t,k'
+" set complete=.
 let g:AutoComplPop_IgnoreCaseOption = 0
 let g:AutoComplPop_BehaviorKeywordLength = 2
 

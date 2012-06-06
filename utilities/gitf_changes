@@ -1,0 +1,3 @@
+#!/usr/bin/env sh
+
+git diff-index --abbrev=7 HEAD $1 | awk 'BEGIN { OFS = ":" } { print $5, $3 }' | sed s/\\.\\.\\.//g

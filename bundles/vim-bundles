@@ -1,19 +1,21 @@
 #!/usr/bin/env sh
 
 LC_CTYPE=en_US.UTF-8
+LOC="/tmp/vim-plugins"
 
-mkdir -p "$HOME/Library/Application Support/vim/plugins"
-cd "$HOME/Library/Application Support/vim/plugins"
+mkdir -p $LOC
+cd $LOC
 
 for i in `cat $HOME/.bash/bundles/plugins.list`
 do 
     git clone $i
 done
 
-for p in `ls -l $HOME/Library/Application Support/vim/plugins | awk '/./ { print $NF }'`
+for p in `ls -l $LOC | awk '/.*/ { print $NF }'`
 do
-    cp "$p/doc/*" "$HOME/.vim/doc/"
-    cp "$p/plugin/*" "$HOME/vim/plugin/"
+    echo "p = $p"
+    cp "$LOC/$p/doc/*" "$HOME/.vim/doc/"
+    cp "$LOC/$p/plugin/*" "$HOME/vim/plugin/"
 done
 
 echo 'done'
