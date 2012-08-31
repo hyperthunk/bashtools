@@ -1,0 +1,15 @@
+#!/usr/bin/env sh
+
+DUMP="$$.out"
+sh -c "$1" | tee "/tmp/$DUMP"
+RC=$?
+LC=`wc -l "/tmp/$DUMP" | awk '/.*/ { print $1 }'`
+if [ "x-v" = x"$2" ]; then
+    SOUT="`cat /tmp/$DUMP`";
+else
+    SOUT="StdIO: $LC Lines (/tmp/$DUMP)"
+fi
+growlnotify -n mk -appIcon Terminal "Job Complete" \
+-m "Job: '$1' 
+Exit Status: $RC
+$SOUT"

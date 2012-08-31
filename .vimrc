@@ -153,7 +153,7 @@ set matchpairs+=<:>
 set vb t_vb= "
 
 set laststatus=2
-set statusline=%f\ [%{fugitive#statusline()}]\ %=%l,%c\ %y
+set statusline=%f\ %{fugitive#statusline()}%=%l,%c\ %y
 
 autocmd FileType c,cpp,python,ruby,java,erlang,xml,xsl,xslt,ocaml,haskell,lisp autocmd BufWritePre <buffer> :%s/\s\+$//e
 
@@ -164,8 +164,8 @@ au ColorScheme * highlight ExtraWhitespace guibg=red
 au ColorScheme * highlight LongLines guibg=red
 
 au BufEnter * match ExtraWhitespace /\s\+$/
-au InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
-au InsertLeave * match ExtraWhiteSpace /\s\+$/
+au InsertEnter * match ExtraWhitespace /\s\+$/
+au InsertLeave * match ExtraWhitespace /\s\+$/
 
 au BufEnter * match LongLines /\%>79v.\+/
 au InsertEnter * match LongLines /\%>79v\%#\@<!.\+/
