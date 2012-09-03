@@ -1,93 +1,3 @@
-
-(add-to-list 'load-path "/Users/t4/Library/Erlang/tools/emacs")
-(setq erlang-root-dir "/Users/t4/Library/Erlang/Current")
-(setq erlang-man-root-dir "/Users/t4/Library/Erlang/Current/lib/erlang")
-(setq exec-path (cons "/Users/t4/Library/Erlang/Current/bin" exec-path))
-(require 'erlang-start)
-
-(add-to-list 'load-path "/Users/t4/Library/Erlang/Site/wrangler-1.0/elisp")
-(require 'wrangler)
-
-(global-set-key (kbd "C-x M-l") 'goto-line)
-
-;; Some Erlang customizations
-(add-hook 'erlang-mode-hook
-  (lambda ()
-  ;; when starting an Erlang shell in Emacs, default in the node name
-  (setq inferior-erlang-machine-options '("-sname" "emacs"))))
-;; prevent annoying hang-on-compile
-(defvar inferior-erlang-prompt-timeout t)
-;; tell distel to default to that node
-(setq erl-nodename-cache
-      (make-symbol
-       (concat
-        "emacs@"
-        (car (split-string (shell-command-to-string "hostname"))))))
-;; A number of the erlang-extended-mode key bindings are useful in the shell too
-(defconst distel-shell-keys
-  '(("\C-\M-i"   erl-complete)
-    ("\M-?"      erl-complete)
-    ("\M-."      erl-find-source-under-point)
-    ("\M-,"      erl-find-source-unwind)
-    ("\M-*"      erl-find-source-unwind)
-    )
-  "Additional keys to bind when in Erlang shell.")
-(add-hook 'erlang-shell-mode-hook
-  (lambda ()
-;; add some Distel bindings to the Erlang shell
-        (dolist (spec distel-shell-keys)
-        (define-key erlang-shell-mode-map (car spec) (cadr spec)))))
-
-(require 'erlang-flymake)
-(defun ebm-find-rebar-top-recr (dirname)
-      (let* ((project-dir (locate-dominating-file dirname "rebar.config")))
-        (if project-dir
-            (let* ((parent-dir (file-name-directory (directory-file-name project-dir)))
-                   (top-project-dir (if (and parent-dir (not (string= parent-dir "/")))
-                                       (ebm-find-rebar-top-recr parent-dir)
-                                      nil)))
-              (if top-project-dir
-                  top-project-dir
-                project-dir))
-              project-dir)))
-
-(defun ebm-find-rebar-top ()
-  (interactive)
-  (let* ((dirname (file-name-directory (buffer-file-name)))
-         (project-dir (ebm-find-rebar-top-recr dirname)))
-    (if project-dir
-        project-dir
-      (erlang-flymake-get-app-dir))))
-
- (defun ebm-directory-dirs (dir name)
-    "Find all directories in DIR."
-    (unless (file-directory-p dir)
-      (error "Not a directory `%s'" dir))
-    (let ((dir (directory-file-name dir))
-          (dirs '())
-          (files (directory-files dir nil nil t)))
-        (dolist (file files)
-          (unless (member file '("." ".."))
-            (let ((absolute-path (expand-file-name (concat dir "/" file))))
-              (when (file-directory-p absolute-path)
-                (if (string= file name)
-                    (setq dirs (append (cons absolute-path
-                                             (ebm-directory-dirs absolute-path name))
-                                       dirs))
-                    (setq dirs (append
-                                (ebm-directory-dirs absolute-path name)
-                                dirs)))))))
-          dirs))
-
-(defun ebm-get-deps-code-path-dirs ()
-    (ebm-directory-dirs (ebm-find-rebar-top) "ebin"))
-
-(defun ebm-get-deps-include-dirs ()
-   (ebm-directory-dirs (ebm-find-rebar-top) "include"))
-
-(fset 'erlang-flymake-get-code-path-dirs 'ebm-get-deps-code-path-dirs)
-(fset 'erlang-flymake-get-include-dirs-function 'ebm-get-deps-include-dirs)
-
 (add-to-list 'load-path "~/.emacs.d/el-get/el-get")
 
 (unless (require 'el-get nil t)
@@ -235,3 +145,157 @@
   (set-frame-parameter nil 'fullscreen
 		       (if (frame-parameter nil 'fullscreen) nil 'fullboth)))
 (global-set-key [f11] 'fullscreen)
+
+;; dev
+
+(add-to-list 'load-path "/Users/t4/Library/Erlang/tools/emacs")
+(setq erlang-root-dir "/Users/t4/Library/Erlang/Current")
+(setq erlang-man-root-dir "/Users/t4/Library/Erlang/Current/lib/erlang")
+(setq exec-path (cons "/Users/t4/Library/Erlang/Current/bin" exec-path))
+(require 'erlang-start)
+
+(add-to-list 'load-path "/Users/t4/Library/Erlang/Site/wrangler-1.0/elisp")
+(require 'wrangler)
+
+(global-set-key (kbd "C-x M-l") 'goto-line)
+
+;; Some Erlang customizations
+(add-hook 'erlang-mode-hook
+  (lambda ()
+  ;; when starting an Erlang shell in Emacs, default in the node name
+  (setq inferior-erlang-machine-options '("-sname" "emacs" "-pa" "ebin"))))
+;; prevent annoying hang-on-compile
+(defvar inferior-erlang-prompt-timeout t)
+
+;; tell distel to default to that node
+;;(setq erl-nodename-cache
+;;      (make-symbol
+;;       (concat
+;;        "emacs@"
+;;        (car (split-string (shell-command-to-string "hostname -s"))))))
+
+;; A number of the erlang-extended-mode key bindings are useful in the shell too
+(defconst distel-shell-keys
+  '(("\C-\M-i"   erl-complete)
+    ("\M-?"      erl-complete)
+    ("\M-."      erl-find-source-under-point)
+    ("\M-,"      erl-find-source-unwind)
+    ("\M-*"      erl-find-source-unwind)
+    )
+  "Additional keys to bind when in Erlang shell.")
+(add-hook 'erlang-shell-mode-hook
+  (lambda ()
+;; add some Distel bindings to the Erlang shell
+        (dolist (spec distel-shell-keys)
+        (define-key erlang-shell-mode-map (car spec) (cadr spec)))))
+
+(require 'erlang-flymake)
+(defun ebm-find-rebar-top-recr (dirname)
+      (let* ((project-dir (locate-dominating-file dirname "rebar.config")))
+        (if project-dir
+            (let* ((parent-dir (file-name-directory (directory-file-name project-dir)))
+                   (top-project-dir (if (and parent-dir (not (string= parent-dir "/")))
+                                       (ebm-find-rebar-top-recr parent-dir)
+                                      nil)))
+              (if top-project-dir
+                  top-project-dir
+                project-dir))
+              project-dir)))
+
+(defun ebm-find-rebar-top ()
+  (interactive)
+  (let* ((dirname (file-name-directory (buffer-file-name)))
+         (project-dir (ebm-find-rebar-top-recr dirname)))
+    (if project-dir
+        project-dir
+      (erlang-flymake-get-app-dir))))
+
+ (defun ebm-directory-dirs (dir name)
+    "Find all directories in DIR."
+    (unless (file-directory-p dir)
+      (error "Not a directory `%s'" dir))
+    (let ((dir (directory-file-name dir))
+          (dirs '())
+          (files (directory-files dir nil nil t)))
+        (dolist (file files)
+          (unless (member file '("." ".."))
+            (let ((absolute-path (expand-file-name (concat dir "/" file))))
+              (when (file-directory-p absolute-path)
+                (if (string= file name)
+                    (setq dirs (append (cons absolute-path
+                                             (ebm-directory-dirs absolute-path name))
+                                       dirs))
+                    (setq dirs (append
+                                (ebm-directory-dirs absolute-path name)
+                                dirs)))))))
+          dirs))
+
+(defun ebm-get-deps-code-path-dirs ()
+    (ebm-directory-dirs (ebm-find-rebar-top) "ebin"))
+
+(defun ebm-get-deps-include-dirs ()
+   (ebm-directory-dirs (ebm-find-rebar-top) "include"))
+
+(fset 'erlang-flymake-get-code-path-dirs 'ebm-get-deps-code-path-dirs)
+(fset 'erlang-flymake-get-include-dirs-function 'ebm-get-deps-include-dirs)
+
+;; distel and autocomplete
+
+(defvar ac-source-distel
+  '((candidates . ac-distel-candidates)
+    (requires . 0)
+    (cache)))
+
+(defvar ac-distel-candidates-cache nil
+  "Horrible global variable that caches the selection to be returned.")
+
+(defun ac-distel-candidates ()
+  (ac-distel-complete)
+  ac-distel-candidates-cache)
+
+(defun ac-distel-complete ()
+  "Complete the module or remote function name at point."
+  (interactive)
+  (let ((node erl-nodename-cache)
+        (end (point))
+        (beg (ignore-errors
+               (save-excursion (backward-sexp 1)
+                               ;; FIXME: see erl-goto-end-of-call-name
+                               (when (eql (char-before) ?:)
+                                 (backward-sexp 1))
+                               (point)))))
+    (when beg
+      (let* ((str (buffer-substring-no-properties beg end))
+             (buf (current-buffer))
+             (continuing (equal last-command (cons 'erl-complete str))))
+        (setq this-command (cons 'erl-complete str))
+        (if (string-match "^\\(.*\\):\\(.*\\)$" str)
+            ;; completing function in module:function
+            (let ((mod (intern (match-string 1 str)))
+                  (pref (match-string 2 str))
+                  (beg (+ beg (match-beginning 2))))
+              (erl-spawn
+               (erl-send-rpc node 'distel 'functions (list mod pref))
+               (&ac-distel-receive-completions "function" beg end pref buf
+                                               continuing)))
+          ;; completing just a module
+          (erl-spawn
+           (erl-send-rpc node 'distel 'modules (list str))
+           (&ac-distel-receive-completions "module"
+                                           beg end str buf continuing)))))))
+
+(defun &ac-distel-receive-completions (what beg end prefix buf continuing)
+  (let ((state (erl-async-state buf)))
+    (erl-receive (what state beg end prefix buf continuing)
+        ((['rex ['ok completions]]
+          (setq ac-distel-candidates-cache completions))
+         (['rex ['error reason]]
+          (message "Error: %s" reason))
+         (other
+          (message "Unexpected reply: %S" other))))))
+
+(defun ac-distel-setup ()
+  (setq ac-sources '(ac-source-distel)))
+(add-hook 'erlang-mode-hook 'ac-distel-setup)
+(add-hook 'erlang-shell-mode-hook 'ac-distel-setup)
+
