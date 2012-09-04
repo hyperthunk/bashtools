@@ -115,8 +115,8 @@
 (global-set-key (kbd "C-x o") 'switch-to-minibuffer)
 (global-set-key (kbd "C-x M-l") 'goto-line)
 
-(require 'smart-tab)
-(global-smart-tab-mode 1)
+;; (require 'smart-tab)
+;; (global-smart-tab-mode 1)
 (show-paren-mode 1)
 
 ;; use ido for minibuffer completion
@@ -146,33 +146,45 @@
 		       (if (frame-parameter nil 'fullscreen) nil 'fullboth)))
 (global-set-key [f11] 'fullscreen)
 
-;; dev
+;; dev modes and utils
+
+(defvar prog-modes-hooks
+  '(c-mode-hook erlang-mode-hook haskell-mode-hook emacs-lisp-mode-hook
+                ocaml-mode-hook lisp-mode-hook scheme-mode-hook java-mode-hook)
+  "A list of hooks for major modes that deal with programming languages")
+
+(defun add-prog-modes-hook (hook)
+  "Adds the hook to all the programming modes in `prog-modes-hooks'"
+  (mapc (lambda (mode-hook)
+          (add-hook mode-hook hook))
+        prog-modes-hooks))
 
 (add-to-list 'load-path "/Users/t4/Library/Erlang/tools/emacs")
 (setq erlang-root-dir "/Users/t4/Library/Erlang/Current")
 (setq erlang-man-root-dir "/Users/t4/Library/Erlang/Current/lib/erlang")
 (setq exec-path (cons "/Users/t4/Library/Erlang/Current/bin" exec-path))
 (require 'erlang-start)
-
+(add-to-list 'load-path "/Users/t4/Library/Erlang/Site/distel/elisp")
 (add-to-list 'load-path "/Users/t4/Library/Erlang/Site/wrangler-1.0/elisp")
 (require 'wrangler)
 
 (global-set-key (kbd "C-x M-l") 'goto-line)
 
 ;; Some Erlang customizations
+
 (add-hook 'erlang-mode-hook
   (lambda ()
   ;; when starting an Erlang shell in Emacs, default in the node name
-  (setq inferior-erlang-machine-options '("-sname" "emacs" "-pa" "ebin"))))
-;; prevent annoying hang-on-compile
+  (setq inferior-erlang-machine-options (list "-sname" "emacs" "-remsh" (string erl-nodename-cache)))))
+  ;; prevent annoying hang-on-compile
 (defvar inferior-erlang-prompt-timeout t)
 
 ;; tell distel to default to that node
-;;(setq erl-nodename-cache
-;;      (make-symbol
-;;       (concat
-;;        "emacs@"
-;;        (car (split-string (shell-command-to-string "hostname -s"))))))
+(setq erl-nodename-cache
+     (make-symbol
+       (concat
+        "distel@"
+        (car (split-string (shell-command-to-string "hostname -s"))))))
 
 ;; A number of the erlang-extended-mode key bindings are useful in the shell too
 (defconst distel-shell-keys
@@ -185,7 +197,7 @@
   "Additional keys to bind when in Erlang shell.")
 (add-hook 'erlang-shell-mode-hook
   (lambda ()
-;; add some Distel bindings to the Erlang shell
+	;; add some Distel bindings to the Erlang shell
         (dolist (spec distel-shell-keys)
         (define-key erlang-shell-mode-map (car spec) (cadr spec)))))
 
@@ -298,4 +310,33 @@
   (setq ac-sources '(ac-source-distel)))
 (add-hook 'erlang-mode-hook 'ac-distel-setup)
 (add-hook 'erlang-shell-mode-hook 'ac-distel-setup)
+
+(require 'auto-complete-config)
+(require 'flyspell)
+(ac-flyspell-workaround)
+(require 'whitespace)
+
+(setq-default indent-tabs-mode nil)
+
+;; visual aids (thanks bitonic)
+;; (invert-face 'default)
+;; (set-default 'cursor-type 'box)
+(setq-default indicate-empty-lines t)
+(setq whitespace-style '(face lines-tail)
+      whitespace-line-column 80)
+(add-prog-modes-hook (lambda ()
+                       ; We use `show-trailing-whitespace' instead of
+                       ; `whitespace-mode' because the former plays better with
+                       ; auto-complete
+                       (setq show-trailing-whitespace t)
+                       (show-paren-mode 1)
+                       (whitespace-mode 1)
+                       (auto-complete-mode 1)))
+
+(global-hl-line-mode 1)
+
+;; (set-face-background 'hl-line "#1a1a1a")
+;; we set the completion as well, since completions will
+;; always be on the highlighted line
+;; (set-face-background 'ac-completion-face "#1a1a1a")
 
