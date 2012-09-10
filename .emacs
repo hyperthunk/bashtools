@@ -13,9 +13,7 @@
  el-get-sources
  '(el-get				; el-get is self-hosting
    escreen            			; screen for emacs, C-\ C-h
-   php-mode-improved			; if you're into php...
    switch-window			; takes over C-x o
-   auto-complete			; complete as you type with overlays
    zencoding-mode			; http://www.emacswiki.org/emacs/ZenCoding
 
    (:name buffer-move			; have to add your own keys
@@ -39,6 +37,15 @@
 	  :after (lambda ()
 		   ;; when using AZERTY keyboard, consider C-x C-_
 		   (global-set-key (kbd "C-x C-/") 'goto-last-change)))))
+
+(push '(:name yasnippet
+             :website "https://github.com/capitaomorte/yasnippet.git"
+             :description "YASnippet is a template system for Emacs."
+             :type github
+             :pkgname "capitaomorte/yasnippet"
+             :features "yasnippet"
+             :compile "yasnippet.el")
+     el-get-sources)
 
 (unless (string-match "apple-darwin" system-configuration)
   (loop for p in '(color-theme		; nice looking emacs
@@ -114,6 +121,7 @@
 
 (global-set-key (kbd "C-x o") 'switch-to-minibuffer)
 (global-set-key (kbd "C-x M-l") 'goto-line)
+(global-set-key (kbd "C-c M-l") 'delete-trailing-whitespace)
 
 ;; (require 'smart-tab)
 ;; (global-smart-tab-mode 1)
@@ -126,6 +134,9 @@
 (setq ido-enable-flex-matching t)
 (setq ido-use-filename-at-point 'guess)
 (setq ido-show-dot-for-dired t)
+(add-hook 'ido-setup-hook 
+          (lambda () 
+            (define-key ido-completion-map [tab] 'ido-complete)))
 
 ;; default key to switch buffer is C-x b, but that's not easy enough
 ;;
@@ -158,6 +169,20 @@
   (mapc (lambda (mode-hook)
           (add-hook mode-hook hook))
         prog-modes-hooks))
+
+(require 'yasnippet)
+(setq yas-snippet-dirs '("~/snippets"))
+
+(require 'ecb)
+(setq stack-trace-on-error t)
+(global-set-key (kbd "C-c p") 'ecb-nav-goto-previous)
+(global-set-key (kbd "C-c n") 'ecb-nav-goto-next)
+
+(setenv "PATH" (concat "/Users/t4/Library/Erlang/Current/bin:"
+                (getenv "PATH")))
+
+(setq shell-file-name "bash")
+(setq shell-command-switch "-ic")
 
 (add-to-list 'load-path "/Users/t4/Library/Erlang/tools/emacs")
 (setq erlang-root-dir "/Users/t4/Library/Erlang/Current")
@@ -192,7 +217,6 @@
     ("\M-?"      erl-complete)
     ("\M-."      erl-find-source-under-point)
     ("\M-,"      erl-find-source-unwind)
-    ("\M-*"      erl-find-source-unwind)
     )
   "Additional keys to bind when in Erlang shell.")
 (add-hook 'erlang-shell-mode-hook
@@ -309,6 +333,8 @@
 (defun ac-distel-setup ()
   (setq ac-sources '(ac-source-distel)))
 (add-hook 'erlang-mode-hook 'ac-distel-setup)
+(add-hook 'erlang-mode-hook 'erlang-wrangler-on)
+(add-hook 'erlang-mode-hook (lambda () (erlang-extended-mode 1)))
 (add-hook 'erlang-shell-mode-hook 'ac-distel-setup)
 
 (require 'auto-complete-config)
