@@ -177,6 +177,7 @@
 (setq stack-trace-on-error t)
 (global-set-key (kbd "C-c p") 'ecb-nav-goto-previous)
 (global-set-key (kbd "C-c n") 'ecb-nav-goto-next)
+(global-set-key (kbd "C-c . M-f") 'ecb-grep)
 
 (setenv "PATH" (concat "/Users/t4/Library/Erlang/Current/bin:"
                 (getenv "PATH")))

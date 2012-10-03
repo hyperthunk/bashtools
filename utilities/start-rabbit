@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+
+echo "[{rabbitmq_mochiweb, [{listeners, [{mgmt, [{port, $3}]}]}]}]." > "/tmp/etc/$1.config"
+
+env RABBITMQ_NODENAME=$1 RABBITMQ_NODE_PORT=$2 RABBITMQ_LOG_BASE="/tmp" RABBITMQ_MNESIA_DIR="/tmp/rabbitmq-$1-mnesia" RABBITMQ_PID_FILE="/tmp/rabbitmq-$2.pid" RABBITMQ_PLUGINS_EXPAND_DIR="/tmp/rabbitmq-$1-plugins-scratch" RABBITMQ_ENABLED_PLUGINS_FILE="/tmp/enabled-plugins" RABBITMQ_CONFIG_FILE="/tmp/etc/$1" ./scripts/rabbitmq-server
