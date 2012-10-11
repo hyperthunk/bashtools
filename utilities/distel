@@ -37,29 +37,41 @@ find_mod() {
 
 stop_node() {
     do_erl_call "erlang" "halt" "0"
-    check_result "ok"
+    sleep 1
+    check_running
+    if [ "$?" != "0" ]; then
+        echo 'done.'
+    else
+        EPMD=$(epmd -names)
+        echo "ERROR: unable to kill node - $EPMD"
+    fi
 }
 
 ensure_running() {
     check_running
     if [ "$?" != "0" ]; then
-        erl -sname distel -detached
+        exec erl -sname distel -detached
     fi
 }
 
 check_running() {
     NODEUP=$(epmd -names | grep distel | wc -l | awk '/.*/ { print $NF }')
     if [ "$NODEUP" != "1" ]; then
-        return 0
-    else
         return 1
+    else
+        return 0
     fi
 }
 
 do_erl_call() {
     RESULT=$(erl_call -n distel@iske -a "$1 $2 [$3]" 2>&1)
-    echo "[distel@iske] $1:$2($3) -> $RESULT" >> "$LOG"
+    echo "[distel@iske] $1:$2($3) -> $RESULT. `date +'[%d/%m/%y %H:%M:%S]'`" >> "$LOG"
 }
+
+case "$1" in
+    -X|--stop)
+        stop_node
+esac
 
 ensure_running
 
@@ -73,10 +85,7 @@ case "$1" in
     -L|--show-log)
         cat "$LOG" ;;
     -C|--clear-log)
-        rm -f "$LOG"; touch "$LOG" ;;
-    -X|--stop)
-        stop_node
-    ;;
+        rm -f "$LOG"; touch "$LOG"
 esac
 
 exit
