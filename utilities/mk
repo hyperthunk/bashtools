@@ -1,15 +1,14 @@
 #!/usr/bin/env sh
 
+echo "sh -c \"$@\""
 DUMP="$$.out"
-sh -c "$1" | tee "/tmp/$DUMP"
+sh -c "$@" | tee "/tmp/$DUMP"
 RC=$?
 LC=`wc -l "/tmp/$DUMP" | awk '/.*/ { print $1 }'`
-if [ "x-v" = x"$2" ]; then
-    SOUT="`cat /tmp/$DUMP`";
-else
-    SOUT="StdIO: $LC Lines (/tmp/$DUMP)"
-fi
+SOUT="StdIO: $LC Lines (/tmp/$DUMP)"
 growlnotify -n mk -appIcon Terminal "Job Complete" \
 -m "Job: '$1' 
 Exit Status: $RC
 $SOUT"
+
+afplay /System/Library/Sounds/Submarine.aiff > /dev/null 2>&1 &

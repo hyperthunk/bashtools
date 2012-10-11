@@ -1,0 +1,65 @@
+#!/usr/bin/env sh
+
+SELF="$0"
+LOG="/tmp/distel.call.log"
+
+print_usage() {
+    data=$(sed -n '/^usage: /,$p' "$SELF")
+    printf '%s\n' "$data"
+}
+
+check_result() {
+    if [ "$RESULT" == "$1" ]; then
+        echo 'done.'
+    else
+        echo "ERROR: $RESULT"
+        exit 1
+    fi
+}
+
+alter_path() {
+    PATHFUNC="add_patha"
+    case "$1" in
+        "-pz")
+            PATHFUNC="add_pathz";;
+        -ap|-zp)
+            PATHFUNC="del_path"
+    esac
+    ARGV="\"`pwd`/ebin\""
+    do_erl_call "code" "$PATHFUNC" "$ARGV"
+    check_result "true"
+}
+
+find_mod() {
+    do_erl_call "code" "which" "$1"
+    echo "$RESULT"
+}
+
+do_erl_call() {
+    RESULT=$(erl_call -n distel@iske -a "$1 $2 [$3]" 2>&1)
+    echo "[distel@iske] $1:$2($3) -> $RESULT" >> "$LOG"
+}
+
+case "$1" in
+    '-h')
+        print_usage ;;
+    -pa|-pz|-ap|-zp)
+        alter_path "$1" ;;
+    --which|--find)
+        find_mod "$2" ;;
+    -L|--show-log)
+        cat "$LOG" ;;
+    -C|--clear-log)
+        rm -f "$LOG"; touch "$LOG"
+    ;;
+esac
+
+exit
+
+usage: distel [options]
+-pa                     appends $CWD/ebin to the code path
+-pz                     prepends $CWD/ebin to the code path
+-ap/-zp                 deletes $CWD/ebin from the code path
+--which/--find [Mod]    looks for Mod on the code path
+--show-log/-L           print a log of issued commands (and results)
+--clear-log/-C          clear the log of issued commands
