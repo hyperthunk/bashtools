@@ -1,6 +1,10 @@
 #!/usr/bin/env sh
 
 SELF="$0"
+if [ "-x$NODENAME" == "-x" ]; then
+    NODENAME="`basename $SELF`"
+fi
+
 LOG="/tmp/distel.call.log"
 
 print_usage() {
@@ -25,7 +29,11 @@ alter_path() {
         -ap|-zp)
             PATHFUNC="del_path"
     esac
-    ARGV="\"`pwd`/ebin\""
+    if [ "-x$2" == "-x" ]; then
+        ARGV="\"`pwd`/ebin\""
+    else
+        ARGV="\"`pwd`/$2\""
+    fi
     do_erl_call "code" "$PATHFUNC" "$ARGV"
     check_result "true"
 }
@@ -50,12 +58,14 @@ stop_node() {
 ensure_running() {
     check_running
     if [ "$?" != "0" ]; then
-        exec erl -sname distel -detached
+        erl -sname $NODENAME -detached
+        sleep 1
+        ensure_running
     fi
 }
 
 check_running() {
-    NODEUP=$(epmd -names | grep distel | wc -l | awk '/.*/ { print $NF }')
+    NODEUP=$(epmd -names | grep "$NODENAME" | wc -l | awk '/.*/ { print $NF }')
     if [ "$NODEUP" != "1" ]; then
         return 1
     else
@@ -64,24 +74,33 @@ check_running() {
 }
 
 do_erl_call() {
-    RESULT=$(erl_call -n distel@iske -a "$1 $2 [$3]" 2>&1)
-    echo "[distel@iske] $1:$2($3) -> $RESULT. `date +'[%d/%m/%y %H:%M:%S]'`" >> "$LOG"
+    ensure_running
+    sleep 1
+    RESULT=$(erl_call -sname "$NODENAME" -a "$1 $2 [$3]" 2>&1)
+    echo "[$NODENAME] $1:$2($3) -> $RESULT. `date +'[%d/%m/%y %H:%M:%S]'`" >> "$LOG"
 }
 
 case "$1" in
     -X|--stop)
         stop_node
+        exit 0
 esac
-
-ensure_running
 
 case "$1" in
     '-h')
         print_usage ;;
     -pa|-pz|-ap|-zp)
-        alter_path "$1" ;;
+        if [ $# == 1 ]; then
+            alter_path "$1" ""
+        else
+            alter_path "$1" "$2"
+        fi;;
     --which|--find)
         find_mod "$2" ;;
+    --shell)
+        erl -sname distel_remsh_$$ -remsh "$NODENAME@`hostname -s`" ;;
+    --cmd|--pipe-cmd)
+        erl_call -sname $NODENAME -e ;;
     -L|--show-log)
         cat "$LOG" ;;
     -C|--clear-log)
@@ -95,5 +114,7 @@ usage: distel [options]
 -pz                     prepends $CWD/ebin to the code path
 -ap/-zp                 deletes $CWD/ebin from the code path
 --which/--find [Mod]    looks for Mod on the code path
+--shell                 launches a remote shell
+--cmd/--pipe-cmd        pipes an expression from stdin to the distel node for eval
 --show-log/-L           print a log of issued commands (and results)
 --clear-log/-C          clear the log of issued commands
