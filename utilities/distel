@@ -100,7 +100,7 @@ case "$1" in
     --shell)
         erl -sname distel_remsh_$$ -remsh "$NODENAME@`hostname -s`" ;;
     --cmd|--pipe-cmd)
-        erl_call -sname $NODENAME -e ;;
+        erl_call -sname $NODENAME -e | awk '/.*/ { print $0 }' ;;
     -L|--show-log)
         cat "$LOG" ;;
     -C|--clear-log)
