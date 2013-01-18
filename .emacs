@@ -1,4 +1,5 @@
 (add-to-list 'load-path "~/.emacs.d/el-get/el-get")
+(add-to-list 'load-path "~/Library/Haskell/ghc-7.4.2/lib/ghc-mod-1.11.2/share")
 
 (unless (require 'el-get nil t)
   (url-retrieve
@@ -38,14 +39,6 @@
 		   ;; when using AZERTY keyboard, consider C-x C-_
 		   (global-set-key (kbd "C-x C-/") 'goto-last-change)))))
 
-(push '(:name yasnippet
-             :website "https://github.com/capitaomorte/yasnippet.git"
-             :description "YASnippet is a template system for Emacs."
-             :type github
-             :pkgname "capitaomorte/yasnippet"
-             :features "yasnippet"
-             :compile "yasnippet.el")
-     el-get-sources)
 
 (unless (string-match "apple-darwin" system-configuration)
   (loop for p in '(color-theme		; nice looking emacs
@@ -170,8 +163,8 @@
           (add-hook mode-hook hook))
         prog-modes-hooks))
 
-(require 'yasnippet)
-(setq yas-snippet-dirs '("~/snippets"))
+;; (require 'yasnippet)
+;; (setq yas-snippet-dirs '("~/snippets"))
 
 (require 'ecb)
 (setq stack-trace-on-error t)
@@ -179,8 +172,17 @@
 (global-set-key (kbd "C-c n") 'ecb-nav-goto-next)
 (global-set-key (kbd "C-c . M-f") 'ecb-grep)
 
+(setenv "PATH" (concat "/Library/Haskell/ghc-7.4.2/lib/ghc-mod-1.11.2/bin:"
+                (getenv "PATH")))
+(setenv "PATH" (concat "/Users/t4/bin:"
+                (getenv "PATH")))
 (setenv "PATH" (concat "/Users/t4/Library/Erlang/Current/bin:"
                 (getenv "PATH")))
+(setenv "PATH" (concat "/Users/t4/Library/Haskell/bin:"
+                (getenv "PATH")))
+
+(setq exec-path (cons "/Users/t4/Library/Haskell/bin" exec-path))
+(setq exec-path (cons "/Users/t4/Library/Haskell/ghc-7.4.2/lib/ghc-mod-1.11.2/bin" exec-path))
 
 (setq shell-file-name "bash")
 (setq shell-command-switch "-ic")
@@ -273,8 +275,8 @@
 (defun ebm-get-deps-include-dirs ()
    (ebm-directory-dirs (ebm-find-rebar-top) "include"))
 
-(fset 'erlang-flymake-get-code-path-dirs 'ebm-get-deps-code-path-dirs)
-(fset 'erlang-flymake-get-include-dirs-function 'ebm-get-deps-include-dirs)
+;; (fset 'erlang-flymake-get-code-path-dirs 'ebm-get-deps-code-path-dirs)
+;; (fset 'erlang-flymake-get-include-dirs-function 'ebm-get-deps-include-dirs)
 
 ;; distel and autocomplete
 
@@ -366,4 +368,41 @@
 ;; we set the completion as well, since completions will
 ;; always be on the highlighted line
 ;; (set-face-background 'ac-completion-face "#1a1a1a")
+
+(load "~/.emacs.d/el-get/haskell-mode/haskell-site-file")
+
+(add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
+
+;; hslint on the command line only likes this indentation mode;
+;; alternatives commented out below.
+(add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
+
+;; (add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
+;; (add-hook 'haskell-mode-hook 'turn-on-haskell-simple-indent)
+
+;; Ignore compiled Haskell files in filename completions
+(add-to-list 'completion-ignored-extensions ".hi")
+
+(autoload 'ghc-init "ghc" nil t)
+(require 'flymake)
+
+(defun flymake-Haskell-init ()
+  (flymake-simple-make-init-impl
+   'flymake-create-temp-with-folder-structure nil nil
+   (file-name-nondirectory buffer-file-name)
+   'flymake-get-Haskell-cmdline))
+
+(defun flymake-get-Haskell-cmdline (source base-dir)
+  (list "flycheck_haskell.pl"
+        (list source base-dir)))
+
+(push '(".+\\.hs$" flymake-Haskell-init flymake-simple-java-cleanup)
+      flymake-allowed-file-name-masks)
+(push '(".+\\.lhs$" flymake-Haskell-init flymake-simple-java-cleanup)
+      flymake-allowed-file-name-masks)
+(push
+ '("^\\(\.+\.hs\\|\.lhs\\):\\([0-9]+\\):\\([0-9]+\\):\\(.+\\)"
+   1 2 3 4) flymake-err-line-patterns)
+
+(add-hook 'haskell-mode-hook (lambda () (ghc-init) (flymake-mode)))
 
