@@ -18,6 +18,4 @@ Alt scheme (where hipe, smp and epoll support are assumed) is .....
     word size:          32 or 64
     emulator-word-size: l(ong) or s(hort) or none (for 32bit builds)
 
-
-
 NB: No build will be produced without `--enable-threads` ever.

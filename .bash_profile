@@ -1,6 +1,7 @@
 # Darwin specific profile.
 
 export ERL_TOP=$HOME/Library/Erlang
+export GHC_TOP=$HOME/Library/Haskell
 source ~/.bashrc;
 
 echo -e "Kernel Information: " `uname -smr`
@@ -126,6 +127,15 @@ complete -o nospace -F _rebar rebar
 ##
 
 # MacPorts Installer addition on 2012-05-22_at_15:42:06: adding an appropriate PATH variable for use with MacPorts.
-export PATH=/opt/local/bin:/opt/local/sbin:$PATH
+# export PATH=/opt/local/bin:/opt/local/sbin:$PATH
+# Finished adapting your PATH environment variable for use with MacPorts.
+
+
+##
+# Your previous /Users/t4/.bash_profile file was backed up as /Users/t4/.bash_profile.macports-saved_2012-10-04_at_14:09:13
+##
+
+# MacPorts Installer addition on 2012-10-04_at_14:09:13: adding an appropriate PATH variable for use with MacPorts.
+# export PATH=/opt/local/bin:/opt/local/sbin:$PATH
 # Finished adapting your PATH environment variable for use with MacPorts.
 

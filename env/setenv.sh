@@ -30,7 +30,6 @@ export CABAL_BIN="$HOME/.cabal/bin"
 
 ## Misc/Homeless
 export FLASH_HOME="/Applications/Flash Player.app/Contents/MacOS"
-export ABBOT_HOME="/usr/local/src/web/abbot"
 
 ## Generic Oracle Shit - applies to instantclient only
 export ORACLE_HOME="$SQLPATH"
@@ -40,6 +39,7 @@ export TNS_ADMIN="$ORACLE_HOME/admin"
 export PATH="$HOME/.bash/utilities:$HOME/bin:$HOME/bin/cccs:$PATH"
 export PATH="$GODI_TOP/bin:$CABAL_BIN:$RUBY_HOME/bin:$PYTHON_BASE/bin:$PATH"
 export PATH="$ERL_ROOT/bin:$PATH"
+export PATH="$GHC_ROOT/bin:$PATH"
 export PATH="$FLASH_HOME:$ABBOT_HOME/bin:$PATH"
 export PATH="$JAVA_HOME:$JRUBY_HOME/bin:$JYTHON_HOME:$JYTHON_HOME/bin:$PATH"
 export PATH="$M2_HOME/bin:$CATALINA_HOME/bin:$ROO_HOME/bin:$PATH"
@@ -47,5 +47,7 @@ export PATH="$FEDORA_HOME/server/bin:$FEDORA_HOME/client/bin:$PATH"
 export PATH="$POSTGRES_BIN:$PGSQLHOME/bin:$SQLPATH:$PATH"
 
 # MacPorts Installer addition on 2010-07-08_at_21:29:30: adding an appropriate PATH variable for use with MacPorts.
-export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
+# export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
+export PATH="/usr/local/Cellar/git/1.8.1.1/bin:$PATH"
+
 # Finished adapting your PATH environment variable for use with MacPorts.

@@ -1,0 +1,27 @@
+#!/usr/bin/env sh
+
+case "$1" in
+'list')
+    ls -l "$GHC_TOP/Versions" | awk '/dr.*/ { print $NF }'
+	;;
+'use')
+    rm -f "$GHC_TOP/Current"
+    ln -s "$GHC_TOP/Versions/$2" "$GHC_TOP/Current"
+  ;;
+'site')
+    echo "$GHC_TOP"
+    ;;
+'env')
+    echo "Home: $GHC_TOP"
+    echo "Site: `ghc-env site`"
+    echo "Active: `ghc-env current`"
+    echo "Environment:"
+    set | grep GHC_
+    ;;
+'current')
+    echo "`ls -la $GHC_TOP/Current | awk -F '/' '{ print $NF }'`"
+    ;;
+*)
+	echo "Usage: $0 { list | use (version) | site | env | current }"
+	;;
+esac

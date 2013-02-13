@@ -172,7 +172,7 @@
 (global-set-key (kbd "C-c n") 'ecb-nav-goto-next)
 (global-set-key (kbd "C-c . M-f") 'ecb-grep)
 
-(setenv "PATH" (concat "/Library/Haskell/ghc-7.4.2/lib/ghc-mod-1.11.2/bin:"
+(setenv "PATH" (concat "/Users/t4/Library/Haskell/ghc-7.4.2/lib/ghc-mod-1.11.2/bin:"
                 (getenv "PATH")))
 (setenv "PATH" (concat "/Users/t4/bin:"
                 (getenv "PATH")))
