@@ -1,27 +1,50 @@
 #!/usr/bin/env sh
 
+if [ "$GHC_TOP-x" == "-x" ]; then
+    echo "GHC_TOP environment variable must be set first"
+    exit 1
+fi
+
 case "$1" in
 'list')
     ls -l "$GHC_TOP/Versions" | awk '/dr.*/ { print $NF }'
-	;;
+    ;;
 'use')
     rm -f "$GHC_TOP/Current"
+    rm -f "$GHC_TOP/Cabal"
     ln -s "$GHC_TOP/Versions/$2" "$GHC_TOP/Current"
-  ;;
+    ln -s "$GHC_TOP/System/$2" "$GHC_TOP/Cabal"
+    ;;
 'site')
-    echo "$GHC_TOP"
+    if [ -d "$GHC_TOP/Site" ]; then
+        ls -la $GHC_TOP/Site | awk -F '/' '{ print $NF }';
+    else
+        echo 'no active sites'
+    fi
     ;;
 'env')
     echo "Home: $GHC_TOP"
-    echo "Site: `ghc-env site`"
-    echo "Active: `ghc-env current`"
+    echo "Active Site: `ghc-env site`"
+    echo "Active Compiler: `ghc-env active`"
     echo "Environment:"
     set | grep GHC_
     ;;
-'current')
-    echo "`ls -la $GHC_TOP/Current | awk -F '/' '{ print $NF }'`"
+'full-install')
+    echo "not supported"
+    exit 1
+    ;;
+'install')
+    ghc-env use "$2"
+    pushd .
+    cd $GHC_TOP/Common/cabal/cabal-install
+    env DEFAULT_PREFIX="$GHC_TOP/System/$2" ./bootstrap.sh
+    popd
+    echo "done"
+    ;;
+'active')
+    ls -la $GHC_TOP/Current | awk -F '/' '{ print $NF }'
     ;;
 *)
-	echo "Usage: $0 { list | use (version) | site | env | current }"
-	;;
+    echo "Usage: $0 { list | use (version) | site | env | full-install | install | active }"
+    ;;
 esac
