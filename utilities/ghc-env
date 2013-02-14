@@ -48,6 +48,9 @@ case "$1" in
     env VERBOSE=-v PREFIX="$GHC_TOP/System/$2" ./bootstrap.sh
     cd $PWD
     cabal update
+    ghc-env install-dev
+    ;;
+'install-dev')
     cabal install cabal-dev --force-reinstalls
     cabal install happy
     cabal install ghc-mod
