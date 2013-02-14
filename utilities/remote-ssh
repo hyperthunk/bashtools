@@ -1,0 +1,8 @@
+#!/usr/bin/env sh
+
+# takes username host
+# e.g., watsont ssh1.engx.vmware.com
+
+echo "use your RSA token to log in, then 'ssh t4@localhost -p 10601' to begin"
+echo "you can run 'ssh -X t4@frigg' and 'gnome-session' to start remote desktop"
+ssh -L 10601:10.20.218.230:22 "$1@$2"

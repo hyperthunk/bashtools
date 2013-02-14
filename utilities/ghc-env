@@ -35,8 +35,11 @@ case "$1" in
     set | grep --colour=never CABAL_
     ;;
 'full-install')
-    echo "not supported"
-    exit 1
+    PWD = "`pwd`"
+    cd "$2"
+    ./configure --prefix=$GHC_TOP/Versions/$3
+    make install
+    ghc-env install
     ;;
 'install')
     ghc-env use "$2"

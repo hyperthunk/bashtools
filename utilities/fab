@@ -6,7 +6,5 @@
 import os
 import sys
 
-
-
 if __NAME__ == '__MAIN__':
-    run()
+    
