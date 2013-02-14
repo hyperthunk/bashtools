@@ -9,6 +9,10 @@ case "$1" in
 'list')
     ls -l "$GHC_TOP/Versions" | awk '/dr.*/ { print $NF }'
     ;;
+'init')
+    mkdir -p "$GHC_TOP/Versions"
+    mkdir -p "$GHC_TOP/System"
+    ;;
 'use')
     rm -f "$GHC_TOP/Current"
     rm -f "$GHC_TOP/Cabal"
@@ -27,7 +31,8 @@ case "$1" in
     echo "Active Site: `ghc-env site`"
     echo "Active Compiler: `ghc-env active`"
     echo "Environment:"
-    set | grep GHC_
+    set | grep --colour=never GHC_
+    set | grep --colour=never CABAL_
     ;;
 'full-install')
     echo "not supported"
@@ -41,6 +46,8 @@ case "$1" in
     cd $PWD
     cabal update
     cabal install cabal-dev --force-reinstalls
+    cabal install happy
+    cabal install ghc-mod
     ;;
 'active')
     ls -la $GHC_TOP/Current | awk -F '/' '{ print $NF }'

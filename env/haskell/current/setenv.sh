@@ -1,3 +1,5 @@
 
 export GHC_ROOT=$GHC_TOP/Current
-export GHC_EXTRA=$GHC_TOP/Extra
+export CABAL_BASE="$GHC_TOP/Cabal"
+export CABAL_BIN="$CABAL_BASE/bin"
+export GHC_SITES=

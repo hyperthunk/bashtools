@@ -26,7 +26,6 @@ export DYLD_LIBRARY_PATH="$LD_LIBRARY_PATH:/opt/local/lib:$DYLD_LIBRARY_PATH"
 
 ## Haskell/Cabal and OCaml
 export GODI_TOP="$HOME/Library/OCaml"
-export CABAL_BIN="$HOME/.cabal/bin"
 
 ## Misc/Homeless
 export FLASH_HOME="/Applications/Flash Player.app/Contents/MacOS"

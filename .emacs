@@ -1,5 +1,5 @@
 (add-to-list 'load-path "~/.emacs.d/el-get/el-get")
-(add-to-list 'load-path "~/Library/Haskell/ghc-7.4.2/lib/ghc-mod-1.11.2/share")
+(add-to-list 'load-path "/Users/t4/Library/Haskell/Common/ghc-mod-1.11.2/elisp/")
 
 (unless (require 'el-get nil t)
   (url-retrieve
@@ -172,17 +172,20 @@
 (global-set-key (kbd "C-c n") 'ecb-nav-goto-next)
 (global-set-key (kbd "C-c . M-f") 'ecb-grep)
 
-(setenv "PATH" (concat "/Users/t4/Library/Haskell/ghc-7.4.2/lib/ghc-mod-1.11.2/bin:"
-                (getenv "PATH")))
 (setenv "PATH" (concat "/Users/t4/bin:"
                 (getenv "PATH")))
 (setenv "PATH" (concat "/Users/t4/Library/Erlang/Current/bin:"
                 (getenv "PATH")))
-(setenv "PATH" (concat "/Users/t4/Library/Haskell/bin:"
+(setenv "PATH" (concat "/Users/t4/Library/Haskell/Current/bin:"
+                (getenv "PATH")))
+(setenv "PATH" (concat "/Users/t4/Library/Haskell/Cabal/bin:"
+                (getenv "PATH")))
+(setenv "PATH" (concat "/Users/t4/Library/Haskell/Common/ghc-mod-1.11.2/dist/build/ghc-mod:"
                 (getenv "PATH")))
 
-(setq exec-path (cons "/Users/t4/Library/Haskell/bin" exec-path))
-(setq exec-path (cons "/Users/t4/Library/Haskell/ghc-7.4.2/lib/ghc-mod-1.11.2/bin" exec-path))
+(setq exec-path (cons "/Users/t4/Library/Haskell/Current/bin" exec-path))
+(setq exec-path (cons "/Users/t4/Library/Haskell/Cabal/bin" exec-path))
+(setq exec-path (cons "/Users/t4/Library/Haskell/Common/ghc-mod-1.11.2/dist/build/ghc-mod" exec-path))
 
 (setq shell-file-name "bash")
 (setq shell-command-switch "-ic")
