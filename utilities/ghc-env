@@ -36,8 +36,8 @@ case "$1" in
     ;;
 'full-install')
     PWD = "`pwd`"
-    cd "$2"
-    ./configure --prefix=$GHC_TOP/Versions/$3
+    cd "$3"
+    ./configure --prefix=$GHC_TOP/Versions/$2
     make install
     ghc-env install
     ;;
