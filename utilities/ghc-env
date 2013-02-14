@@ -35,11 +35,12 @@ case "$1" in
     ;;
 'install')
     ghc-env use "$2"
-    pushd .
+    PWD="`pwd`"
     cd $GHC_TOP/Common/cabal/cabal-install
-    env DEFAULT_PREFIX="$GHC_TOP/System/$2" ./bootstrap.sh
-    popd
-    echo "done"
+    env VERBOSE=-v PREFIX="$GHC_TOP/System/$2" ./bootstrap.sh
+    cd $PWD
+    cabal update
+    cabal install cabal-dev --force-reinstalls
     ;;
 'active')
     ls -la $GHC_TOP/Current | awk -F '/' '{ print $NF }'
