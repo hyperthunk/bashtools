@@ -278,8 +278,8 @@
 (defun ebm-get-deps-include-dirs ()
    (ebm-directory-dirs (ebm-find-rebar-top) "include"))
 
-;; (fset 'erlang-flymake-get-code-path-dirs 'ebm-get-deps-code-path-dirs)
-;; (fset 'erlang-flymake-get-include-dirs-function 'ebm-get-deps-include-dirs)
+(fset 'erlang-flymake-get-code-path-dirs 'ebm-get-deps-code-path-dirs)
+(fset 'erlang-flymake-get-include-dirs-function 'ebm-get-deps-include-dirs)
 
 ;; distel and autocomplete
 
