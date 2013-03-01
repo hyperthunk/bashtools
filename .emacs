@@ -190,7 +190,7 @@
 (setq shell-file-name "bash")
 (setq shell-command-switch "-ic")
 
-(add-to-list 'load-path "/Users/t4/Library/Erlang/tools/emacs")
+(add-to-list 'load-path "/Users/t4/Library/Erlang/Current/tools/emacs")
 (setq erlang-root-dir "/Users/t4/Library/Erlang/Current")
 (setq erlang-man-root-dir "/Users/t4/Library/Erlang/Current/lib/erlang")
 (setq exec-path (cons "/Users/t4/Library/Erlang/Current/bin" exec-path))

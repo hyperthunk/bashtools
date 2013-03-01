@@ -6,6 +6,7 @@ if [ "-x$NODENAME" == "-x" ]; then
 fi
 
 LOG="/tmp/distel.call.log"
+ERL_CALL=`find /Users/t4/Library/Erlang/Current/lib/erlang/lib -name erl_call`
 
 print_usage() {
     data=$(sed -n '/^usage: /,$p' "$SELF")
@@ -76,7 +77,7 @@ check_running() {
 do_erl_call() {
     ensure_running
     sleep 1
-    RESULT=$(erl_call -sname "$NODENAME" -a "$1 $2 [$3]" 2>&1)
+    RESULT=$($ERL_CALL -sname "$NODENAME" -a "$1 $2 [$3]" 2>&1)
     echo "[$NODENAME] $1:$2($3) -> $RESULT. `date +'[%d/%m/%y %H:%M:%S]'`" >> "$LOG"
 }
 
@@ -100,7 +101,7 @@ case "$1" in
     --shell)
         erl -sname distel_remsh_$$ -remsh "$NODENAME@`hostname -s`" ;;
     --cmd|--pipe-cmd)
-        erl_call -sname $NODENAME -e | awk '/.*/ { print $0 }' ;;
+        $ERL_CALL -sname $NODENAME -e | awk '/.*/ { print $0 }' ;;
     -L|--show-log)
         cat "$LOG" ;;
     -C|--clear-log)
