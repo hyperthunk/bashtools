@@ -71,7 +71,7 @@
 
 ;; choose your own fonts, in a system dependant way
 (if (string-match "apple-darwin" system-configuration)
-    (set-face-font 'default "Monaco-13")
+    (set-face-font 'default "Monaco-12")
   (set-face-font 'default "Monospace-10"))
 
 (global-hl-line-mode)			; highlight current line
@@ -127,8 +127,8 @@
 (setq ido-enable-flex-matching t)
 (setq ido-use-filename-at-point 'guess)
 (setq ido-show-dot-for-dired t)
-(add-hook 'ido-setup-hook 
-          (lambda () 
+(add-hook 'ido-setup-hook
+          (lambda ()
             (define-key ido-completion-map [tab] 'ido-complete)))
 
 ;; default key to switch buffer is C-x b, but that's not easy enough
@@ -278,8 +278,8 @@
 (defun ebm-get-deps-include-dirs ()
    (ebm-directory-dirs (ebm-find-rebar-top) "include"))
 
-(fset 'erlang-flymake-get-code-path-dirs 'ebm-get-deps-code-path-dirs)
-(fset 'erlang-flymake-get-include-dirs-function 'ebm-get-deps-include-dirs)
+;; (fset 'erlang-flymake-get-code-path-dirs 'ebm-get-deps-code-path-dirs)
+;; (fset 'erlang-flymake-get-include-dirs-function 'ebm-get-deps-include-dirs)
 
 ;; distel and autocomplete
 
@@ -409,3 +409,16 @@
 
 (add-hook 'haskell-mode-hook (lambda () (ghc-init) (flymake-mode)))
 
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(ecb-layout-window-sizes nil)
+ '(ecb-source-path (quote (("/" "/") ("/Users/t4/work/hyperthunk/distributed-process-platform" "dpp")))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )

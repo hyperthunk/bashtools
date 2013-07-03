@@ -1,8 +1,10 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =6
-let g:netrw_dirhist_1='/Users/t4/work/nebularis/systest/profiles'
-let g:netrw_dirhist_2='/Users/t4/work/nebularis/systest'
-let g:netrw_dirhist_3='/Users/t4/work/nebularis/systest/test'
-let g:netrw_dirhist_4='/Users/t4/work/nebularis/systest'
-let g:netrw_dirhist_5='/Users/t4/work/nebularis/systest/logs'
-let g:netrw_dirhist_6='/Users/t4/work/nebularis/systest'
+let g:netrw_dirhist_cnt =8
+let g:netrw_dirhist_1='/Users/t4/work/vmware/rabbitmq-public-umbrella/rabbitmq-test/multi-node'
+let g:netrw_dirhist_2='/Users/t4/work/vmware/rabbitmq-public-umbrella/rabbitmq-test/multi-node/profiles'
+let g:netrw_dirhist_3='/Users/t4/.access'
+let g:netrw_dirhist_4='/Users/t4/work/jake'
+let g:netrw_dirhist_5='/Users/t4/work/vmware/rabbitmq-public-umbrella/rabbitmq-test/multi-node/logs'
+let g:netrw_dirhist_6='/Users/t4/Downloads/foo'
+let g:netrw_dirhist_7='/Users/t4/work/vmware/rabbitmq-public-umbrella/rabbitmq-federation'
+let g:netrw_dirhist_8='/Users/t4/work/vmware/rabbitmq-public-umbrella/rabbitmq-management-agent'

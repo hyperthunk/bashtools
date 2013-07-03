@@ -96,6 +96,12 @@ case "$1" in
         else
             alter_path "$1" "$2"
         fi;;
+    --setd)
+        echo "file:set_cwd(\"`pwd`\")." | $ERL_CALL -sname $NODENAME -e | awk '/.*/ { print "ok" }';;
+    --getd)
+        echo "element(2, file:get_cwd())." | $ERL_CALL -sname $NODENAME -e | awk '/(\{ok, )(.*)\}/ { print substr($NF, 1, length($NF)-1) }';;
+    --sync)
+        echo "sync:go()." | $ERL_CALL -sname $NODENAME -e | awk '/.*/ { print "ok" }';;
     --which|--find)
         find_mod "$2" ;;
     --shell)
