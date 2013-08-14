@@ -108,6 +108,9 @@ case "$1" in
         erl -sname distel_remsh_$$ -remsh "$NODENAME@`hostname -s`" ;;
     --cmd|--pipe-cmd)
         $ERL_CALL -sname $NODENAME -e | awk '/.*/ { print $0 }' ;;
+    --stop)
+        $ERL_CALL -sname "$NODENAME" -a init halt []
+        echo "done.";;
     -L|--show-log)
         cat "$LOG" ;;
     -C|--clear-log)
@@ -125,3 +128,5 @@ usage: distel [options]
 --cmd/--pipe-cmd        pipes an expression from stdin to the distel node for eval
 --show-log/-L           print a log of issued commands (and results)
 --clear-log/-C          clear the log of issued commands
+--getd/--setd           get/set pwd
+--sync                  enable sync

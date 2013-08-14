@@ -174,6 +174,8 @@
 
 (setenv "PATH" (concat "/Users/t4/bin:"
                 (getenv "PATH")))
+(setenv "PATH" (concat "/usr/local/bin:"
+                (getenv "PATH")))
 (setenv "PATH" (concat "/Users/t4/Library/Erlang/Current/bin:"
                 (getenv "PATH")))
 (setenv "PATH" (concat "/Users/t4/Library/Haskell/Current/bin:"
@@ -184,6 +186,7 @@
                 (getenv "PATH")))
 
 (setq exec-path (cons "/Users/t4/Library/Haskell/Current/bin" exec-path))
+(setq exec-path (cons "/usr/local/bin" exec-path))
 (setq exec-path (cons "/Users/t4/Library/Haskell/Cabal/bin" exec-path))
 (setq exec-path (cons "/Users/t4/Library/Haskell/Common/ghc-mod-1.11.2/dist/build/ghc-mod" exec-path))
 
@@ -415,7 +418,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(ecb-layout-window-sizes nil)
- '(ecb-source-path (quote (("/" "/") ("/Users/t4/work/hyperthunk/distributed-process-platform" "dpp")))))
+ '(ecb-source-path (quote (("/" "/") ("/Users/t4/work/hyperthunk/distributed-process-platform" "dpp") (#("/Users/t4/work/vmware/rabbitmq-public-umbrella" 0 46 (help-echo "Mouse-2 toggles maximizing, mouse-3 displays a popup-menu")) "rabbit")))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
