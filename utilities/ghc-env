@@ -10,8 +10,16 @@ case "$1" in
     ls -l "$GHC_TOP/Versions" | awk '/dr.*/ { print $NF }'
     ;;
 'init')
-    mkdir -p "$GHC_TOP/Versions"
-    mkdir -p "$GHC_TOP/System"
+    mkdir -p $GHC_TOP/Versions
+    mkdir -p $GHC_TOP/System
+    rm -rf $GHC_TOP/Common
+    mkdir -p $GHC_TOP/Common
+    curl http://www.haskell.org/cabal/release/cabal-install-1.18.0.2/cabal-install-1.18.0.2.tar.gz >> $GHC_TOP/Common/cabal-install.tar.gz
+    pushd .
+    cd $GHC_TOP/Common
+    tar -zxf cabal-install.tar.gz
+    mv cabal-install-1.18.0.2 cabal-install
+    popd
     ;;
 'use')
     rm -f "$GHC_TOP/Current"
@@ -44,7 +52,7 @@ case "$1" in
 'install')
     ghc-env use "$2"
     PWD="`pwd`"
-    cd $GHC_TOP/Common/cabal/cabal-install
+    cd $GHC_TOP/Common/cabal-install
     env VERBOSE=-v PREFIX="$GHC_TOP/System/$2" ./bootstrap.sh
     cd $PWD
     cabal update
