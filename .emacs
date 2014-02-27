@@ -1,4 +1,5 @@
 (add-to-list 'load-path "~/.emacs.d/el-get/el-get")
+(add-to-list 'load-path "~/.emacs.d/el-get/ecb")
 (add-to-list 'load-path "/Users/t4/Library/Haskell/Common/ghc-mod-1.11.2/elisp/")
 
 (unless (require 'el-get nil t)
@@ -39,6 +40,31 @@
 		   ;; when using AZERTY keyboard, consider C-x C-_
 		   (global-set-key (kbd "C-x C-/") 'goto-last-change)))))
 
+(setenv "PATH" (concat "/Users/t4/bin:"
+                (getenv "PATH")))
+(setenv "PATH" (concat "/usr/local/bin:"
+                (getenv "PATH")))
+(setenv "PATH" (concat "/Users/t4/Library/Erlang/Current/bin:"
+                (getenv "PATH")))
+(setenv "PATH" (concat "/Users/t4/Library/Haskell/Current/bin:"
+                (getenv "PATH")))
+(setenv "PATH" (concat "/Users/t4/Library/Haskell/Cabal/bin:"
+                (getenv "PATH")))
+(setenv "PATH" (concat "/Users/t4/Library/Haskell/Common/ghc-mod-1.11.2/dist/build/ghc-mod:"
+                (getenv "PATH")))
+
+(setq exec-path (cons "/Users/t4/Library/Haskell/Current/bin" exec-path))
+(setq exec-path (cons "/usr/local/bin" exec-path))
+(setq exec-path (cons "/Users/t4/Library/Haskell/Cabal/bin" exec-path))
+(setq exec-path (cons "/Users/t4/Library/Haskell/Common/ghc-mod-1.11.2/dist/build/ghc-mod" exec-path))
+
+(setq shell-file-name "bash")
+(setq shell-command-switch "-ic")
+
+(add-to-list 'load-path "/Users/t4/Library/Erlang/Current/tools/emacs")
+(setq erlang-root-dir "/Users/t4/Library/Erlang/Current")
+(setq erlang-man-root-dir "/Users/t4/Library/Erlang/Current/lib/erlang")
+(setq exec-path (cons "/Users/t4/Library/Erlang/Current/bin" exec-path))
 
 (unless (string-match "apple-darwin" system-configuration)
   (loop for p in '(color-theme		; nice looking emacs
@@ -167,36 +193,12 @@
 ;; (setq yas-snippet-dirs '("~/snippets"))
 
 (require 'ecb)
+; (require 'ecb-autoloads)
 (setq stack-trace-on-error t)
 (global-set-key (kbd "C-c p") 'ecb-nav-goto-previous)
 (global-set-key (kbd "C-c n") 'ecb-nav-goto-next)
 (global-set-key (kbd "C-c . M-f") 'ecb-grep)
 
-(setenv "PATH" (concat "/Users/t4/bin:"
-                (getenv "PATH")))
-(setenv "PATH" (concat "/usr/local/bin:"
-                (getenv "PATH")))
-(setenv "PATH" (concat "/Users/t4/Library/Erlang/Current/bin:"
-                (getenv "PATH")))
-(setenv "PATH" (concat "/Users/t4/Library/Haskell/Current/bin:"
-                (getenv "PATH")))
-(setenv "PATH" (concat "/Users/t4/Library/Haskell/Cabal/bin:"
-                (getenv "PATH")))
-(setenv "PATH" (concat "/Users/t4/Library/Haskell/Common/ghc-mod-1.11.2/dist/build/ghc-mod:"
-                (getenv "PATH")))
-
-(setq exec-path (cons "/Users/t4/Library/Haskell/Current/bin" exec-path))
-(setq exec-path (cons "/usr/local/bin" exec-path))
-(setq exec-path (cons "/Users/t4/Library/Haskell/Cabal/bin" exec-path))
-(setq exec-path (cons "/Users/t4/Library/Haskell/Common/ghc-mod-1.11.2/dist/build/ghc-mod" exec-path))
-
-(setq shell-file-name "bash")
-(setq shell-command-switch "-ic")
-
-(add-to-list 'load-path "/Users/t4/Library/Erlang/Current/tools/emacs")
-(setq erlang-root-dir "/Users/t4/Library/Erlang/Current")
-(setq erlang-man-root-dir "/Users/t4/Library/Erlang/Current/lib/erlang")
-(setq exec-path (cons "/Users/t4/Library/Erlang/Current/bin" exec-path))
 (require 'erlang-start)
 (add-to-list 'load-path "/Users/t4/Library/Erlang/Site/distel/elisp")
 (add-to-list 'load-path "/Users/t4/Library/Erlang/Site/wrangler-1.0/elisp")
@@ -411,17 +413,3 @@
    1 2 3 4) flymake-err-line-patterns)
 
 (add-hook 'haskell-mode-hook (lambda () (ghc-init) (flymake-mode)))
-
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(ecb-layout-window-sizes nil)
- '(ecb-source-path (quote (("/" "/") ("/Users/t4/work/hyperthunk/distributed-process-platform" "dpp") (#("/Users/t4/work/vmware/rabbitmq-public-umbrella" 0 46 (help-echo "Mouse-2 toggles maximizing, mouse-3 displays a popup-menu")) "rabbit")))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )

@@ -50,6 +50,18 @@ case "$1" in
     ghc-env install
     ;;
 'install')
+    case "$(uname -s)" in
+      Darwin) if [ ! "$4" ]; then
+		  echo "You need to tweak/check your gcc toolchain. OSX >= 10.7 requires tweaking the GHC settings file and setting 'C compiler command' to the correct path."
+	          echo "You can then run 'ghc-env install-ghc' to complete the installation."
+              else
+		  echo "use sed to fix the setting file ourselves!!"
+              fi
+	      ;;
+      *)      ghc-env install-ghc
+    esac
+    ;;
+'install-ghc')
     ghc-env use "$2"
     PWD="`pwd`"
     cd $GHC_TOP/Common/cabal-install
@@ -59,7 +71,7 @@ case "$1" in
     ghc-env install-dev
     ;;
 'install-dev')
-    cabal install cabal-dev --force-reinstalls
+    cabal install cabal-install --force-reinstalls
     cabal install happy
     cabal install ghc-mod
     ;;
@@ -70,3 +82,4 @@ case "$1" in
     echo "Usage: $0 { list | use (version) | site | env | full-install | install | active }"
     ;;
 esac
+
