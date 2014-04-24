@@ -378,7 +378,6 @@
 ;; (set-face-background 'ac-completion-face "#1a1a1a")
 
 (load "~/.emacs.d/el-get/haskell-mode/haskell-site-file")
-
 (add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
 
 ;; hslint on the command line only likes this indentation mode;
@@ -413,3 +412,11 @@
    1 2 3 4) flymake-err-line-patterns)
 
 (add-hook 'haskell-mode-hook (lambda () (ghc-init) (flymake-mode)))
+
+;; (add-to-list 'load-path "/usr/local/src/haskell/structured-haskell-mode/elisp")
+;; (require 'shm)
+;; (add-hook 'haskell-mode-hook 'structured-haskell-mode)
+;;
+;; (set-face-background 'shm-current-face "#eee8d5")
+;; (set-face-background 'shm-quarantine-face "lemonchiffon")
+
